@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 let mode = 'development';
 let target = 'web';
@@ -31,7 +30,7 @@ module.exports = {
 			directory: path.join(__dirname, 'public'),
 		},
 		hot: true,
-		open: false,
+		open: true,
 		liveReload: true,
 	},
 	devtool: 'source-map',
@@ -45,6 +44,16 @@ module.exports = {
 			{
 				test: /\.css?$/i,
 				use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+			},
+			{
+				test: /\.(js|jsx)$/,
+				exclude: /node_modules/,
+				use: ['babel-loader'],
+			},
+			{
+				test: /\.svg$/,
+				issuer: /\.[jt]sx?$/,
+				use: ['@svgr/webpack'],
 			},
 		],
 	},
