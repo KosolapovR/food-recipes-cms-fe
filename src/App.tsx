@@ -22,6 +22,7 @@ import {
 } from './api';
 import axios from 'axios';
 import { API_TOKEN } from './const';
+import Login from './pages/login';
 
 type LocationGenerics = MakeGenerics<{
   Params: { recipeId: string; userId: string };
@@ -30,10 +31,11 @@ type LocationGenerics = MakeGenerics<{
 const location = new ReactLocation<LocationGenerics>();
 const queryClient = new QueryClient();
 
-const dev = true;
 const App = () => {
-  const [token, insertToken] = useState<string>(
-    localStorage.getItem(API_TOKEN)
+  const [token, insertToken] = useState<string | null>(
+    localStorage.getItem(API_TOKEN) !== 'null'
+      ? localStorage.getItem(API_TOKEN)
+      : null
   );
 
   useEffect(() => {
@@ -52,77 +54,66 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthTokenContext.Provider value={authContextValue}>
-        {dev ? (
+        {token ? (
           <Router
             location={location}
-            routes={
-              dev
-                ? [
-                    {
-                      path: '/',
-                      element: <Dashboard />,
-                    },
-                    {
-                      path: 'recipes',
-                      loader: () =>
-                        queryClient.getQueryData(['recipes']) ??
-                        queryClient.fetchQuery(['recipes'], () =>
-                          fetchRecipes()
-                        ),
-                      children: [
-                        { path: '/', element: <Recipes /> },
-                        {
-                          path: ':recipeId',
-                          element: <Recipe />,
-                          loader: ({
-                            params: { recipeId },
-                          }: {
-                            params: { recipeId: string };
-                          }) =>
-                            queryClient.getQueryData(['recipes', recipeId]) ??
-                            queryClient.fetchQuery(['recipes', recipeId], () =>
-                              fetchRecipeById(recipeId)
-                            ),
-                        },
-                      ],
-                    },
-                    {
-                      path: 'users',
-                      loader: () =>
-                        queryClient.getQueryData(['users']) ??
-                        queryClient.fetchQuery(['users'], () => fetchUsers()),
-                      children: [
-                        { path: '/', element: <Users /> },
-                        {
-                          path: ':userId',
-                          element: <User />,
-                          loader: ({
-                            params: { userId },
-                          }: {
-                            params: { userId: string };
-                          }) =>
-                            queryClient.getQueryData(['users', userId]) ??
-                            queryClient.fetchQuery(['users', userId], () =>
-                              fetchUserById(userId)
-                            ),
-                        },
-                      ],
-                    },
-                  ]
-                : [
-                    {
-                      path: '/signUp',
-                      element: 'Pleas sign up!',
-                    },
-                  ]
-            }
+            routes={[
+              {
+                path: '/',
+                element: <Dashboard />,
+              },
+              {
+                path: 'recipes',
+                loader: () =>
+                  queryClient.getQueryData(['recipes']) ??
+                  queryClient.fetchQuery(['recipes'], () => fetchRecipes()),
+                children: [
+                  { path: '/', element: <Recipes /> },
+                  {
+                    path: ':recipeId',
+                    element: <Recipe />,
+                    loader: ({
+                      params: { recipeId },
+                    }: {
+                      params: { recipeId: string };
+                    }) =>
+                      queryClient.getQueryData(['recipes', recipeId]) ??
+                      queryClient.fetchQuery(['recipes', recipeId], () =>
+                        fetchRecipeById(recipeId)
+                      ),
+                  },
+                ],
+              },
+              {
+                path: 'users',
+                loader: () =>
+                  queryClient.getQueryData(['users']) ??
+                  queryClient.fetchQuery(['users'], () => fetchUsers()),
+                children: [
+                  { path: '/', element: <Users /> },
+                  {
+                    path: ':userId',
+                    element: <User />,
+                    loader: ({
+                      params: { userId },
+                    }: {
+                      params: { userId: string };
+                    }) =>
+                      queryClient.getQueryData(['users', userId]) ??
+                      queryClient.fetchQuery(['users', userId], () =>
+                        fetchUserById(userId)
+                      ),
+                  },
+                ],
+              },
+            ]}
           >
             <Layout>
               <Outlet />
             </Layout>
           </Router>
         ) : (
-          <>sign Up</>
+          <Login />
         )}
       </AuthTokenContext.Provider>
     </QueryClientProvider>
