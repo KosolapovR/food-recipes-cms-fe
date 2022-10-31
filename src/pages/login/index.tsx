@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
-import { Field, Form, Formik } from 'formik';
+import { Field, FieldProps, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { auth } from '../../api';
 import { AuthTokenContext } from '../../context/auth-token-context';
+import Input from '../../components/input';
+import Button from '../../components/button';
 
 const SignupSchema = Yup.object().shape({
   email: Yup.string()
@@ -17,8 +19,13 @@ const SignupSchema = Yup.object().shape({
 
 const Login = () => {
   const { setToken } = useContext(AuthTokenContext);
+  const queryClient = useQueryClient();
   const mutation = useMutation(auth, {
     onSuccess: (data) => {
+      queryClient.setQueryData(['auth'], () => ({
+        email: data.email,
+        isAdmin: data.isAdmin,
+      }));
       setToken(data.token);
     },
   });
@@ -34,18 +41,35 @@ const Login = () => {
             actions.setSubmitting(false);
           }}
         >
-          {({ errors, touched }) => (
-            <Form className="flex flex-col">
-              <label htmlFor="email">Email</label>
-              <Field id="email" name="email" placeholder="email" />
-              {errors.email && touched.email ? <div>{errors.email}</div> : null}
-              <label htmlFor="password">Password</label>
-              <Field id="password" name="password" placeholder="password" />
-              {errors.password && touched.password ? (
-                <div className="text-red-600">{errors.password}</div>
-              ) : null}
-
-              <button type="submit">Submit</button>
+          {() => (
+            <Form>
+              <Field id="email" name="email" as={Input}>
+                {(props: FieldProps) => (
+                  <Input
+                    id="email"
+                    title="Email"
+                    placeholder="email"
+                    {...props}
+                  />
+                )}
+              </Field>
+              <Field name="password" placeholder="password">
+                {(props: FieldProps) => (
+                  <Input
+                    id="password"
+                    title="Password"
+                    type="password"
+                    placeholder="password"
+                    {...props}
+                  />
+                )}
+              </Field>
+              <Button
+                type={mutation.isLoading ? 'button' : 'submit'}
+                title={'Submit'}
+                isLoading={mutation.isLoading}
+                className="mt-4"
+              />
             </Form>
           )}
         </Formik>

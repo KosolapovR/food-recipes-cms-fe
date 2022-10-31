@@ -6,6 +6,7 @@ import {
   Router,
 } from '@tanstack/react-location';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import Layout from './layout/Layout';
 import { Dashboard, Recipe, Recipes, User } from './pages';
@@ -116,6 +117,7 @@ const App = () => {
           <Login />
         )}
       </AuthTokenContext.Provider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 };

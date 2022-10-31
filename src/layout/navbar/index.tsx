@@ -1,5 +1,12 @@
-import React, { MouseEventHandler, ReactNode } from 'react';
-import MoreIcons from '../../components/icons/more.svg';
+import React, {
+  MouseEventHandler,
+  ReactNode,
+  useCallback,
+  useState,
+} from 'react';
+import MoleculeIcon from '../../components/icons/molecule.svg';
+import BookIcon from '../../components/icons/book.svg';
+import UsersIcon from '../../components/icons/users.svg';
 import {
   Link,
   MatchRoute,
@@ -17,8 +24,10 @@ function Navbar() {
         {
           value: 'recipes',
           title: 'Recipes',
-          renderIcon: (selected) => (
-            <MoreIcons fill={selected ? '#FFFFFF' : '#999999'} />
+          renderIcon: (selected, hovered) => (
+            <BookIcon
+              fill={selected ? '#FFFFFF' : hovered ? '#CCCCCC' : '#999999'}
+            />
           ),
           selected: true,
           onMouseEnter: () => loadRoute({ to: 'recipes' }),
@@ -26,8 +35,10 @@ function Navbar() {
         {
           value: '/',
           title: 'Dashboard',
-          renderIcon: (selected) => (
-            <MoreIcons fill={selected ? '#FFFFFF' : '#999999'} />
+          renderIcon: (selected, hovered) => (
+            <MoleculeIcon
+              fill={selected ? '#FFFFFF' : hovered ? '#CCCCCC' : '#999999'}
+            />
           ),
           selected: false,
           onMouseEnter: () => loadRoute({ to: 'dashboard' }),
@@ -40,8 +51,10 @@ function Navbar() {
         {
           value: 'users',
           title: 'Users',
-          renderIcon: (selected) => (
-            <MoreIcons fill={selected ? '#FFFFFF' : '#999999'} />
+          renderIcon: (selected, hovered) => (
+            <UsersIcon
+              fill={selected ? '#FFFFFF' : hovered ? '#CCCCCC' : '#999999'}
+            />
           ),
           selected: false,
           onMouseEnter: () => loadRoute({ to: 'users' }),
@@ -51,11 +64,11 @@ function Navbar() {
   ];
 
   return (
-    <div className="fixed z-10 w-40 md:w-52 h-full bg-zinc-700 p-6 mt-16 shadow-md">
+    <nav className="fixed z-10 w-40 md:w-52 h-full bg-zinc-700 p-6 mt-16 shadow-md">
       {blocks.map((block, index) => (
         <NavbarBlock key={index} {...block} />
       ))}
-    </div>
+    </nav>
   );
 }
 
@@ -84,7 +97,7 @@ const NavbarBlock = ({ title, items }: INavbarBlock) => {
 export interface INavbarBlockItem {
   value: string;
   title: string;
-  renderIcon: (selected?: boolean) => ReactNode;
+  renderIcon: (selected?: boolean, hovered?: boolean) => ReactNode;
   selected?: boolean;
   onMouseEnter: MouseEventHandler;
 }
@@ -94,23 +107,36 @@ const NavbarBlockItem = ({
   selected,
   renderIcon,
   onMouseEnter,
-}: INavbarBlockItem) => (
-  <Link
-    to={`./${value}`}
-    onMouseEnter={onMouseEnter}
-    getActiveProps={() => ({ className: 'text-neutral-100' })}
-    getInactiveProps={() => ({
-      className: 'text-neutral-400 hover:text-neutral-300 hover:cursor-pointe',
-    })}
-  >
-    <div className="flex gap-2 mb-2 last:mb-0">
-      {renderIcon(selected)}
-      <span>{title}</span>
-      <MatchRoute to={value} pending>
-        ...
-      </MatchRoute>
-    </div>
-  </Link>
-);
+}: INavbarBlockItem) => {
+  const [hovered, setHovered] = useState(false);
+
+  const handleMouseEnter = useCallback((e: React.MouseEvent) => {
+    onMouseEnter(e);
+    setHovered(true);
+  }, []);
+  const handleMouseLeave = useCallback(() => {
+    setHovered(false);
+  }, []);
+  return (
+    <Link
+      to={`./${value}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      getActiveProps={() => ({ className: 'text-neutral-100' })}
+      getInactiveProps={() => ({
+        className:
+          'text-neutral-400 hover:text-neutral-300 hover:cursor-pointer',
+      })}
+    >
+      <div className="flex gap-2 mb-2 last:mb-0">
+        {renderIcon(selected, hovered)}
+        <span>{title}</span>
+        <MatchRoute to={value} pending>
+          ...
+        </MatchRoute>
+      </div>
+    </Link>
+  );
+};
 
 export default Navbar;
