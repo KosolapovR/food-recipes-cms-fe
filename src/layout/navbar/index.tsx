@@ -13,6 +13,7 @@ import {
   useLoadRoute,
   useMatchRoute,
 } from '@tanstack/react-location';
+import Spinner from '../../components/spinner';
 
 function Navbar() {
   const loadRoute = useLoadRoute();
@@ -80,7 +81,7 @@ const NavbarBlock = ({ title, items }: INavbarBlock) => {
   const matchRoute = useMatchRoute();
   return (
     <div className="mb-4 last:mb-0">
-      <span className="inline-block mb-2 text-neutral-400 text-sm font-semibold">
+      <span className="inline-block mb-2 text-neutral-400 text-xs font-semibold">
         {title}
       </span>
       {items.map((item, index) => (
@@ -132,7 +133,7 @@ const NavbarBlockItem = ({
         {renderIcon(selected, hovered)}
         <span>{title}</span>
         <MatchRoute to={value} pending>
-          ...
+          <Spinner />
         </MatchRoute>
       </div>
     </Link>

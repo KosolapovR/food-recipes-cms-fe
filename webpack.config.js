@@ -26,6 +26,7 @@ module.exports = () => {
       path: path.resolve(__dirname, 'dist'),
       assetModuleFilename: 'assets/[hash][ext][query]',
       clean: true,
+      publicPath: '/',
     },
     devServer: {
       port: '5000',
@@ -34,6 +35,7 @@ module.exports = () => {
       },
       hot: true,
       liveReload: true,
+      historyApiFallback: true,
     },
     devtool: 'source-map',
     module: {

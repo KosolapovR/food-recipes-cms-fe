@@ -30,7 +30,7 @@ const Login = () => {
     },
   });
   return (
-    <div className="min-h-screen flex items-center justify-center bg-teal-50">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50">
       <div className="w-96 shadow-lg rounded-lg p-6 bg-white text-center">
         <span className="inline-block mb-4 text-xl font-bold">Sign in</span>
         <Formik

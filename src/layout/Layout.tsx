@@ -11,7 +11,7 @@ const Layout = ({ children }: ILayoutProps) => {
       <Header />
       <div className="flex min-h-screen">
         <Navbar />
-        <main className="ml-40 md:ml-52 mt-16 bg-teal-50 p-6 w-full">
+        <main className="ml-40 md:ml-52 mt-16 bg-slate-50 p-6 w-full">
           {children}
         </main>
       </div>
