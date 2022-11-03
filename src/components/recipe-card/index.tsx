@@ -3,11 +3,11 @@ import React, { useCallback } from 'react';
 import CommentIcon from '../icons/comment.svg';
 import EyeIcon from '../icons/eye.svg';
 import Button from '../button';
-import { RecipeStatusType } from '../../interfaces/IRecipe';
+import { IRecipe, RecipeStatusType } from '../../interfaces/IRecipe';
 import cn from 'classnames';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import { removeById } from '../../api/recipe';
+import { removeRecipeById } from '../../api/recipe';
 import { useNavigate } from '@tanstack/react-location';
 
 export interface IRecipeCard {
@@ -31,11 +31,14 @@ const RecipeCard = ({
 
   const onSuccess = () => {
     toast.success('Recipe was deleted');
-    queryClient.refetchQueries(['recipes']);
+
+    queryClient.setQueryData<IRecipe[]>(['recipes', 'All'], (old) => {
+      return old.filter((r) => r.id.toString() !== id);
+    });
   };
   const onError = () => toast.error('Something went wrong...');
 
-  const mutation = useMutation(removeById, {
+  const mutation = useMutation(removeRecipeById, {
     onSuccess,
     onError,
   });

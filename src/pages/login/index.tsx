@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { auth } from '../../api';
 import { AuthTokenContext } from '../../context/auth-token-context';
-import Input from '../../components/input';
+import TextField from '../../components/inputs/text-field';
 import Button from '../../components/button';
 
 const SignupSchema = Yup.object().shape({
@@ -43,9 +43,9 @@ const Login = () => {
         >
           {() => (
             <Form>
-              <Field id="email" name="email" as={Input}>
+              <Field id="email" name="email">
                 {(props: FieldProps) => (
-                  <Input
+                  <TextField
                     id="email"
                     title="Email"
                     placeholder="email"
@@ -55,7 +55,7 @@ const Login = () => {
               </Field>
               <Field name="password" placeholder="password">
                 {(props: FieldProps) => (
-                  <Input
+                  <TextField
                     id="password"
                     title="Password"
                     type="password"

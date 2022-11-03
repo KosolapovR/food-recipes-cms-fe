@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-location';
 
 import { fetchRecipes } from '../../api';
 import RecipeCard from '../../components/recipe-card';
@@ -7,7 +8,6 @@ import { IRecipe } from '../../interfaces';
 import { Tabs } from '../../components/tabs';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import Button from '../../components/button';
-import { useNavigate } from '@tanstack/react-location';
 
 const Recipes = () => {
   const queryClient = useQueryClient();
@@ -18,7 +18,8 @@ const Recipes = () => {
   const { data } = useQuery<IRecipe[]>({
     queryKey: ['recipes', tab],
     queryFn: fetchRecipes,
-    initialData: () => queryClient.getQueryData<IRecipe[]>(['recipes']),
+    initialData: () =>
+      queryClient.getQueryData<IRecipe[]>(['recipes', tab]) || [],
   });
 
   const [parent] = useAutoAnimate<HTMLDivElement>(/* optional config */);
@@ -51,7 +52,7 @@ const Recipes = () => {
         ]}
         value={tab}
         onChange={handleChangeTab}
-        className="mb-4"
+        className="mb-4 bg-slate-50 sticky top-16 z-10 -ml-1 -mr-1 px-1"
       />
       <div
         ref={parent}

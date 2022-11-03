@@ -33,7 +33,7 @@ export const Tab = ({
     {!!badgeFill && (
       <span
         className={cn(
-          'inline-block w-1.5 h-1.5 rounded rounded-lgm',
+          'inline-block w-1.5 h-1.5 rounded rounded-lg',
           badgeFill === 'critic' ? 'bg-red-600' : 'bg-green-400'
         )}
       />

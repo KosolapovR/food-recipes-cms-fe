@@ -3,11 +3,16 @@ import { FieldProps } from 'formik';
 import cn from 'classnames';
 import autoAnimate from '@formkit/auto-animate';
 
-export interface IInput
+export interface ITextAreaFieldProps
   extends Omit<FieldProps, 'form'>,
-    Omit<InputHTMLAttributes<HTMLInputElement>, 'form'> {}
+    Omit<InputHTMLAttributes<HTMLTextAreaElement>, 'form'> {}
 
-const Input = ({ field, meta, className, ...props }: IInput) => {
+const TextAreaField = ({
+  field,
+  meta,
+  className,
+  ...props
+}: ITextAreaFieldProps) => {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     autoAnimate(ref.current);
@@ -23,8 +28,7 @@ const Input = ({ field, meta, className, ...props }: IInput) => {
       >
         {props.title}
       </label>
-      <input
-        type="text"
+      <textarea
         {...field}
         {...props}
         className={cn(
@@ -42,4 +46,4 @@ const Input = ({ field, meta, className, ...props }: IInput) => {
   );
 };
 
-export default Input;
+export default TextAreaField;

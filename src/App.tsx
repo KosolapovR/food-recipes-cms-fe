@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import axios, { AxiosError } from 'axios';
 import {
   MakeGenerics,
   Outlet,
@@ -23,7 +24,6 @@ import {
   fetchUsers,
   fetchUserById,
 } from './api';
-import axios, { AxiosError } from 'axios';
 import { API_TOKEN } from './const';
 import Login from './pages/login';
 
@@ -153,8 +153,8 @@ const App = () => {
           pauseOnHover
           theme="light"
         />
+        <ReactQueryDevtools initialIsOpen={false} />
       </AuthTokenContext.Provider>
-      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 };
