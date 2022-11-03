@@ -10,7 +10,8 @@ export async function fetchRecipes({ queryKey }: QueryFunctionContext) {
   return data.data;
 }
 
-export async function fetchRecipeById(id: string) {
+export async function fetchRecipeById({ queryKey }: QueryFunctionContext) {
+  const [_key, id] = queryKey;
   const { data } = await axios.get(`${baseUrl}/recipe/${id}`);
   return data.data;
 }

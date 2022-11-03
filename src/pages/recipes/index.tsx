@@ -7,9 +7,12 @@ import { IRecipe } from '../../interfaces';
 import { Tabs } from '../../components/tabs';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import Button from '../../components/button';
+import { useNavigate } from '@tanstack/react-location';
 
 const Recipes = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
   const [tab, setTab] = useState('All');
 
   const { data } = useQuery<IRecipe[]>({
@@ -24,13 +27,21 @@ const Recipes = () => {
     setTab(v);
   }, []);
 
+  const handleAddRecipe = useCallback(() => {
+    navigate({ to: '/recipes/new', replace: false });
+  }, []);
+
   return (
     <div>
       <div className="flex space-between items-center gap-4 h-6 text-neutral-600 mb-4">
         <div className="text-xl">Recipes</div>
         <div className="w-px h-full bg-neutral-400" />
         <div className="text-xl grow">{data.length}</div>
-        <Button title="+ ADD RECIPE" className="w-40" />
+        <Button
+          title="+ ADD RECIPE"
+          onClick={handleAddRecipe}
+          className="w-40"
+        />
       </div>
       <Tabs
         options={[

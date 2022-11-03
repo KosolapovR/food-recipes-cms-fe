@@ -83,22 +83,29 @@ const App = () => {
               },
               {
                 path: 'recipes',
-                loader: () =>
-                  queryClient.getQueryData(['recipes']) ??
-                  queryClient.fetchQuery(['recipes'], fetchRecipes),
                 children: [
-                  { path: '/', element: <Recipes /> },
+                  {
+                    path: '/',
+                    element: <Recipes />,
+                    loader: () =>
+                      queryClient.getQueryData(['recipes']) ??
+                      queryClient.fetchQuery(['recipes'], fetchRecipes),
+                  },
+                  { path: 'new', element: <Recipe /> },
                   {
                     path: ':recipeId',
-                    element: <Recipe />,
+                    element: async ({ params }) => (
+                      <Recipe id={params.recipeId} />
+                    ),
                     loader: ({
                       params: { recipeId },
                     }: {
                       params: { recipeId: string };
                     }) =>
                       queryClient.getQueryData(['recipes', recipeId]) ??
-                      queryClient.fetchQuery(['recipes', recipeId], () =>
-                        fetchRecipeById(recipeId)
+                      queryClient.fetchQuery(
+                        ['recipes', recipeId],
+                        fetchRecipeById
                       ),
                   },
                 ],

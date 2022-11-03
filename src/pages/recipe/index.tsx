@@ -1,7 +1,10 @@
 import React from 'react';
 
-const Recipe = () => {
-  return <div>Recipe</div>;
+export interface IRecipePageProps {
+  id?: string;
+}
+const Recipe = ({ id }: IRecipePageProps) => {
+  return <div>Recipe {id}</div>;
 };
 
 export default Recipe;
