@@ -49,7 +49,7 @@ const RecipeCard = ({
   }, [id]);
 
   return (
-    <div className="flex flex-col justify-s h-80 bg-white hover:cursor-pointer shadow-md hover:shadow-lg rounded rounded-lg">
+    <div className="flex flex-col justify-s h-80 bg-white shadow-md hover:shadow-lg hover:bg-green-50 rounded rounded-lg">
       <div className="pt-4 px-4">
         <div className="flex justify-end h-6">
           <div
@@ -78,8 +78,19 @@ const RecipeCard = ({
         </div>
       </div>
       <div className="flex justify-center gap-5 px-6 py-3">
-        <Button title={'Edit'} onClick={handleEdit} />
-        <Button title={'Delete'} onClick={handleDelete} />
+        <Button
+          title={'EDIT'}
+          onClick={handleEdit}
+          scale="SM"
+          variant="outlined"
+        />
+        <Button
+          title={'DELETE'}
+          onClick={handleDelete}
+          variant="outlined"
+          color="regular"
+          scale="SM"
+        />
       </div>
     </div>
   );

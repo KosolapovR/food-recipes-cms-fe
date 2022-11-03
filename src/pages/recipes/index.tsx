@@ -6,6 +6,7 @@ import RecipeCard from '../../components/recipe-card';
 import { IRecipe } from '../../interfaces';
 import { Tabs } from '../../components/tabs';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import Button from '../../components/button';
 
 const Recipes = () => {
   const queryClient = useQueryClient();
@@ -28,7 +29,8 @@ const Recipes = () => {
       <div className="flex space-between items-center gap-4 h-6 text-neutral-600 mb-4">
         <div className="text-xl">Recipes</div>
         <div className="w-px h-full bg-neutral-400" />
-        <div className="text-xl">{data.length}</div>
+        <div className="text-xl grow">{data.length}</div>
+        <Button title="+ ADD RECIPE" className="w-40" />
       </div>
       <Tabs
         options={[
