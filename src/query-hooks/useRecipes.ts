@@ -6,12 +6,10 @@ import { RecipeStatusType } from '../interfaces/IRecipe';
 
 export const useRecipes = ({ status }: { status?: RecipeStatusType }) => {
   const queryClient = useQueryClient();
-  const query = useQuery<IRecipe[]>({
-    queryKey: ['recipes', status],
+  const queryKey = status ? ['recipes', status] : ['recipes'];
+  return useQuery<IRecipe[]>({
+    queryKey,
     queryFn: fetchRecipes,
-    initialData: () =>
-      queryClient.getQueryData<IRecipe[]>(['recipes', status]) || [],
+    initialData: () => queryClient.getQueryData<IRecipe[]>(queryKey) || [],
   });
-
-  return query;
 };

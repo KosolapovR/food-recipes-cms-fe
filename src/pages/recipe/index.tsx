@@ -36,7 +36,7 @@ const Recipe = ({ id }: IRecipePageProps) => {
   const createMutation = useMutation(createRecipe, {
     onSuccess: (created: IRecipe) => {
       toast.success('Recipe was created');
-      queryClient.setQueryData<IRecipe[]>(['recipes', 'All'], (old) => {
+      queryClient.setQueryData<IRecipe[]>(['recipes'], (old) => {
         return [...(old || []), created];
       });
 
@@ -48,7 +48,7 @@ const Recipe = ({ id }: IRecipePageProps) => {
   const updateMutation = useMutation(updateRecipe, {
     onSuccess: (updated: IRecipe) => {
       toast.success('Recipe was updated');
-      queryClient.setQueryData<IRecipe[]>(['recipes', 'All'], (old) => {
+      queryClient.setQueryData<IRecipe[]>(['recipes'], (old) => {
         return old.map((r) => (r.id === updated.id ? updated : r));
       });
     },
