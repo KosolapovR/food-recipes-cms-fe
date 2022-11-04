@@ -32,7 +32,7 @@ const RecipeCard = ({
   const onSuccess = () => {
     toast.success('Recipe was deleted');
 
-    queryClient.setQueryData<IRecipe[]>(['recipes', 'All'], (old) => {
+    queryClient.setQueryData<IRecipe[]>(['recipes'], (old) => {
       return old.filter((r) => r.id.toString() !== id);
     });
   };
