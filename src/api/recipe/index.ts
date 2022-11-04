@@ -1,13 +1,14 @@
 import axios from 'axios';
-import { baseUrl } from '../const';
 import { QueryFunctionContext } from '@tanstack/react-query';
+
+import { baseUrl } from '../const';
 import { IRecipe, IRecipeStep } from '../../interfaces';
 import { RecipeStatusType } from '../../interfaces/IRecipe';
 
 export async function fetchRecipes({ queryKey }: QueryFunctionContext) {
   const [_key, status] = queryKey;
   const { data } = await axios.get(
-    `${baseUrl}/recipe${status && status !== 'All' ? `?status=${status}` : ''}`
+    `${baseUrl}/recipe${status ? `?status=${status}` : ''}`
   );
   const res: IRecipe[] = data.data;
   return res;

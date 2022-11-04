@@ -1,11 +1,7 @@
-import React, {
-  ButtonHTMLAttributes,
-  useCallback,
-  useEffect,
-  useRef,
-} from 'react';
+import React, { ButtonHTMLAttributes, useCallback } from 'react';
 import cn from 'classnames';
-import autoAnimate from '@formkit/auto-animate';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
+
 import Spinner from '../spinner';
 
 export interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -25,10 +21,8 @@ const Button = ({
   color,
   ...props
 }: IButton) => {
-  const ref = useRef<HTMLButtonElement>(null);
-  useEffect(() => {
-    autoAnimate(ref.current);
-  }, [ref.current]);
+  const [parent] = useAutoAnimate<HTMLButtonElement>(/* optional config */);
+
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       if (isLoading) return;
@@ -50,7 +44,7 @@ const Button = ({
         scale === 'SM' ? 'h-8 text-sm' : 'h-10',
         className
       )}
-      ref={ref}
+      ref={parent}
       {...props}
       onClick={handleClick}
     >

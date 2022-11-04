@@ -1,28 +1,19 @@
 import React, { useCallback, useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-location';
-
-import { fetchRecipes } from '../../api';
-import RecipeCard from '../../components/recipe-card';
-import { IRecipe } from '../../interfaces';
-import { Tabs } from '../../components/tabs';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
-import Button from '../../components/button';
+
+import { Tabs, RecipeCard, Button } from '../../components';
+import { useRecipes } from '../../query-hooks';
+import { RecipeStatusType } from '../../interfaces/IRecipe';
 
 const Recipes = () => {
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const [tab, setTab] = useState('All');
-
-  const { data } = useQuery<IRecipe[]>({
-    queryKey: ['recipes', tab],
-    queryFn: fetchRecipes,
-    initialData: () =>
-      queryClient.getQueryData<IRecipe[]>(['recipes', tab]) || [],
-  });
-
   const [parent] = useAutoAnimate<HTMLDivElement>(/* optional config */);
+
+  const [tab, setTab] = useState<RecipeStatusType>();
+
+  const { data } = useRecipes({ status: tab });
 
   const handleChangeTab = useCallback((v) => {
     setTab(v);
@@ -46,7 +37,7 @@ const Recipes = () => {
       </div>
       <Tabs
         options={[
-          { value: 'All', label: 'ALL RECIPES' },
+          { value: undefined, label: 'ALL RECIPES' },
           { value: 'Active', label: 'ACTIVE', badgeFill: 'success' },
           { value: 'Inactive', label: 'INACTIVE', badgeFill: 'critic' },
         ]}

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Link, useNavigate } from '@tanstack/react-location';
+import { useNavigate } from '@tanstack/react-location';
 
 import { RecipeForm } from '../../components/forms';
 import { createRecipe, fetchRecipeById, updateRecipe } from '../../api/recipe';
@@ -60,14 +60,11 @@ const Recipe = ({ id }: IRecipePageProps) => {
     [id]
   );
   return (
-    <div>
-      <Link to={'..'}>Back</Link>
-      <RecipeForm
-        {...data}
-        onSubmit={handleSubmit}
-        isLoading={id ? updateMutation.isLoading : createMutation.isLoading}
-      />
-    </div>
+    <RecipeForm
+      {...data}
+      onSubmit={handleSubmit}
+      isLoading={id ? updateMutation.isLoading : createMutation.isLoading}
+    />
   );
 };
 

@@ -1,18 +1,14 @@
 import React, { InputHTMLAttributes, useEffect, useRef } from 'react';
-import { FieldProps } from 'formik';
+import { FieldMetaProps } from 'formik';
 import cn from 'classnames';
 import autoAnimate from '@formkit/auto-animate';
 
 export interface ITextAreaFieldProps
-  extends Omit<FieldProps, 'form'>,
-    Omit<InputHTMLAttributes<HTMLTextAreaElement>, 'form'> {}
+  extends Omit<InputHTMLAttributes<HTMLTextAreaElement>, 'form'> {
+  meta: FieldMetaProps<string>;
+}
 
-const TextAreaField = ({
-  field,
-  meta,
-  className,
-  ...props
-}: ITextAreaFieldProps) => {
+const TextAreaField = ({ meta, className, ...props }: ITextAreaFieldProps) => {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     autoAnimate(ref.current);
@@ -29,7 +25,6 @@ const TextAreaField = ({
         {props.title}
       </label>
       <textarea
-        {...field}
         {...props}
         className={cn(
           'w-full my-1 px-4 py-2 z-20 bg-neutral-200 rounded border border-solid placeholder:text-sm',
