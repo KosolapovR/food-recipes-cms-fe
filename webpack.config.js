@@ -22,7 +22,7 @@ module.exports = () => {
     target,
     entry: './src/index.tsx',
     output: {
-      filename: 'index.js',
+      filename: 'index-cms.js',
       path: path.resolve(__dirname, 'dist'),
       assetModuleFilename: 'assets/[hash][ext][query]',
       clean: true,
