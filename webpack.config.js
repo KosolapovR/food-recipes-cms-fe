@@ -22,14 +22,20 @@ module.exports = () => {
     target,
     entry: './src/index.tsx',
     output: {
-      filename: 'index.js',
+      filename: 'index-cms.js',
       path: path.resolve(__dirname, 'dist'),
       assetModuleFilename: 'assets/[hash][ext][query]',
       clean: true,
       publicPath: '/',
     },
     devServer: {
-      port: '5000',
+      port: '3000',
+      proxy: {
+        '/api': {
+          target: 'http://localhost:8080',
+          pathRewrite: { '^/api': '' },
+        },
+      },
       static: {
         directory: path.join(__dirname, 'public'),
       },
