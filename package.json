@@ -73,6 +73,7 @@
     "*.{js,css,md,html,json}": "npm run format"
   },
   "browserslist": [
-    "last 2 versions"
+    "last 2 versions",
+    "not dead"
   ]
 }
