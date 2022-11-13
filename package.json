@@ -72,5 +72,7 @@
     "*.{ts,tsx, js, jsx}": "npm run lint",
     "*.{js,css,md,html,json}": "npm run format"
   },
-  "browserslist": ["last 2 versions"]
+  "browserslist": [
+    "last 2 versions"
+  ]
 }
