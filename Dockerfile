@@ -10,11 +10,3 @@ RUN npm install
 
 COPY . /usr/cms
 
-CMD npm run build
-
-#RUN npm install -g serve
-#CMD serve dist
-#
-#EXPOSE 3000
-
-

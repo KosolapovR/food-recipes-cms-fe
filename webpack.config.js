@@ -29,7 +29,13 @@ module.exports = () => {
       publicPath: '/',
     },
     devServer: {
-      port: '5000',
+      port: '3000',
+      proxy: {
+        '/api': {
+          target: 'http://localhost:8080',
+          pathRewrite: { '^/api': '' },
+        },
+      },
       static: {
         directory: path.join(__dirname, 'public'),
       },

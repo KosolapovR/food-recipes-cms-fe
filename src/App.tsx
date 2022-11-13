@@ -76,6 +76,7 @@ const App = () => {
         {token ? (
           <Router
             location={location}
+            basepath={'cms'}
             routes={[
               {
                 path: '/',
@@ -112,11 +113,14 @@ const App = () => {
               },
               {
                 path: 'users',
-                loader: () =>
-                  queryClient.getQueryData(['users']) ??
-                  queryClient.fetchQuery(['users'], () => fetchUsers()),
                 children: [
-                  { path: '/', element: <Users /> },
+                  {
+                    path: '/',
+                    element: <Users />,
+                    loader: () =>
+                      queryClient.getQueryData(['users']) ??
+                      queryClient.fetchQuery(['users'], () => fetchUsers()),
+                  },
                   {
                     path: ':userId',
                     element: <User />,
