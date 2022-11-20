@@ -1,6 +1,5 @@
 import React, { ButtonHTMLAttributes, useCallback } from 'react';
 import cn from 'classnames';
-import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 import Spinner from '../spinner';
 
@@ -21,8 +20,6 @@ const Button = ({
   color,
   ...props
 }: IButton) => {
-  const [parent] = useAutoAnimate<HTMLButtonElement>(/* optional config */);
-
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       if (isLoading) return;
@@ -33,7 +30,7 @@ const Button = ({
   return (
     <button
       className={cn(
-        'w-full flex items-center justify-center rounded rounded-2xl text-white',
+        'px-4 flex items-center justify-center rounded-md text-white',
         props.disabled && 'opacity-50',
         variant === 'outlined'
           ? color === 'regular'
@@ -44,7 +41,6 @@ const Button = ({
         scale === 'SM' ? 'h-8 text-sm' : 'h-10',
         className
       )}
-      ref={parent}
       {...props}
       onClick={handleClick}
     >

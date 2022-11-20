@@ -29,11 +29,7 @@ const Recipes = () => {
         <div className="text-xl">Recipes</div>
         <div className="w-px h-full bg-neutral-400" />
         <div className="text-xl grow">{data.length}</div>
-        <Button
-          title="+ ADD RECIPE"
-          onClick={handleAddRecipe}
-          className="w-40"
-        />
+        <Button title="+ ADD RECIPE" onClick={handleAddRecipe} />
       </div>
       <Tabs
         options={[
@@ -47,7 +43,7 @@ const Recipes = () => {
       />
       <div
         ref={parent}
-        className="max-w-screen-xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-3 xl:gap-5"
+        className="max-w-screen-xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-3 xl:gap-5"
       >
         {data.map((r) => (
           <RecipeCard

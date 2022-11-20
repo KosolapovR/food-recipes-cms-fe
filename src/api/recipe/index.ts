@@ -37,6 +37,7 @@ export interface IUpdateRecipeBodyParams extends ICreateRecipeBodyParams {
 }
 
 export async function createRecipe(body: ICreateRecipeBodyParams) {
+  console.log('body', body);
   const { data } = await axios.post(`${baseUrl}/recipe/Create`, body);
   const res: IRecipe = data.data;
   return res;
@@ -44,6 +45,17 @@ export async function createRecipe(body: ICreateRecipeBodyParams) {
 
 export async function updateRecipe(body: IUpdateRecipeBodyParams) {
   const { data } = await axios.put(`${baseUrl}/recipe/Update`, body);
+  const res: IRecipe = data.data;
+  return res;
+}
+
+export async function activateRecipe(body: { id: string }) {
+  const { data } = await axios.post(`${baseUrl}/recipe/Activate`, body);
+  const res: IRecipe = data.data;
+  return res;
+}
+export async function deactivateRecipe(body: { id: string }) {
+  const { data } = await axios.post(`${baseUrl}/recipe/Deactivate`, body);
   const res: IRecipe = data.data;
   return res;
 }

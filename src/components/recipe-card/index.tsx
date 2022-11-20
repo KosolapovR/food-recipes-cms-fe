@@ -29,18 +29,18 @@ const RecipeCard = ({
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const onSuccess = () => {
+  const onSuccessDelete = () => {
     toast.success('Recipe was deleted');
 
     queryClient.setQueryData<IRecipe[]>(['recipes'], (old) => {
       return old.filter((r) => r.id.toString() !== id);
     });
   };
-  const onError = () => toast.error('Something went wrong...');
+  const onErrorDelete = () => toast.error('Something went wrong...');
 
   const mutation = useMutation(removeRecipeById, {
-    onSuccess,
-    onError,
+    onSuccess: onSuccessDelete,
+    onError: onErrorDelete,
   });
 
   const handleDelete = useCallback(() => {

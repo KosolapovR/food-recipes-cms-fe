@@ -2,11 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { FieldArray, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 import { usePrompt } from '@tanstack/react-location';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 import { IUpdateRecipeBodyParams } from '../../../api/recipe';
-import { Button, TextAreaField, TextField } from '../../index';
+import { TextAreaField, TextField } from '../../index';
 import FieldsBlock from '../../fields-block';
-import { useAutoAnimate } from '@formkit/auto-animate/react';
+import ActionButtons, { IActionInfo } from '../../action-buttons';
 
 const RecipeStepSchema = Yup.object().shape({
   title: Yup.string().min(2, 'Min length 2').max(255, 'Max length 255'),
@@ -23,7 +24,7 @@ const validationSchema = Yup.object().shape({
 
 export interface IRecipeFormProps extends IUpdateRecipeBodyParams {
   onSubmit: (values: IUpdateRecipeBodyParams) => void;
-  isLoading?: boolean;
+  actions: IActionInfo[];
 }
 
 const RecipeForm = ({
@@ -33,8 +34,9 @@ const RecipeForm = ({
   previewImagePath,
   title,
   onSubmit,
-  isLoading,
+  actions,
 }: IRecipeFormProps) => {
+  console.log('status, ', status);
   const formik = useFormik({
     initialValues: { id, title, steps, status, previewImagePath },
     validationSchema,
@@ -42,15 +44,13 @@ const RecipeForm = ({
   });
 
   const {
-    handleChange,
     handleSubmit,
+    handleChange,
     values,
     dirty,
     getFieldMeta,
     isSubmitting,
     resetForm,
-    isValid,
-    submitCount,
   } = formik;
 
   const [parent] = useAutoAnimate<HTMLDivElement>({});
@@ -81,10 +81,24 @@ const RecipeForm = ({
 
   return (
     <>
-      <div>
-        {id
-          ? `Recipe ${title}`
-          : `New Recipe ${values.title ? values.title : ''}`}
+      <div className="flex justify-between">
+        <span>
+          {id
+            ? `Recipe ${title}`
+            : `New Recipe ${values.title ? values.title : ''}`}
+        </span>
+        <ActionButtons
+          actions={actions.map((a) =>
+            a.name === 'save'
+              ? {
+                  ...a,
+                  action: () => {
+                    handleSubmit();
+                  },
+                }
+              : a
+          )}
+        />
       </div>
       <FormikProvider value={formik}>
         <form>
@@ -141,15 +155,6 @@ const RecipeForm = ({
               </div>
             )}
           </FieldArray>
-
-          <Button
-            type="button"
-            title="Submit"
-            disabled={!isValid && submitCount > 0}
-            onClick={() => handleSubmit()}
-            isLoading={isLoading}
-            className="mt-4"
-          />
         </form>
       </FormikProvider>
     </>
