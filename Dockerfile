@@ -10,3 +10,5 @@ RUN npm install
 
 COPY . /usr/cms
 
+CMD npm run build
+
