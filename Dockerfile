@@ -6,6 +6,8 @@ COPY package.json .
 RUN rm -rf ./node_modules
 RUN rm -rf ./package-lock.json
 
+RUN apk update && apk add bash
+
 RUN npm install
 
 COPY . /usr/cms
