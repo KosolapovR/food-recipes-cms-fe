@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { AllHTMLAttributes } from 'react';
 
 import Button from '../button';
+import cn from 'classnames';
 
 export interface IActionInfo {
   name: string;
@@ -9,12 +10,12 @@ export interface IActionInfo {
   hidden?: boolean;
   isLoading?: boolean;
 }
-export interface IActionButtons {
+export interface IActionButtonProps extends AllHTMLAttributes<HTMLDivElement> {
   actions: IActionInfo[];
 }
-const ActionButtons = ({ actions }: IActionButtons) => {
+const ActionButtons = ({ actions, className, ...rest }: IActionButtonProps) => {
   return (
-    <div className="flex space-x-1">
+    <div {...rest} className={cn('flex space-x-1', className)}>
       {actions
         .filter((a) => !a.hidden)
         .map((action, index) => (

@@ -8,6 +8,7 @@ import { IUpdateRecipeBodyParams } from '../../../api/recipe';
 import { TextAreaField, TextField } from '../../index';
 import FieldsBlock from '../../fields-block';
 import ActionButtons, { IActionInfo } from '../../action-buttons';
+import Status from '../../status';
 
 const RecipeStepSchema = Yup.object().shape({
   title: Yup.string().min(2, 'Min length 2').max(255, 'Max length 255'),
@@ -36,11 +37,12 @@ const RecipeForm = ({
   onSubmit,
   actions,
 }: IRecipeFormProps) => {
-  console.log('status, ', status);
   const formik = useFormik({
     initialValues: { id, title, steps, status, previewImagePath },
     validationSchema,
-    onSubmit,
+    onSubmit: (params) => {
+      onSubmit(params);
+    },
   });
 
   const {
@@ -81,12 +83,21 @@ const RecipeForm = ({
 
   return (
     <>
-      <div className="flex justify-between">
-        <span>
-          {id
-            ? `Recipe ${title}`
-            : `New Recipe ${values.title ? values.title : ''}`}
-        </span>
+      <div className="flex justify-between space-x-4 pb-4 border-b-gray-300 border-b sticky top-16">
+        <div>
+          <span className="truncate">
+            {id
+              ? `Recipe ${title}`
+              : `New Recipe ${values.title ? values.title : ''}`}
+          </span>
+
+          {id && (
+            <div className="flex space-x-2 items-center uppercase">
+              <Status status={status} />
+              <span>{status}</span>
+            </div>
+          )}
+        </div>
         <ActionButtons
           actions={actions.map((a) =>
             a.name === 'save'
@@ -101,7 +112,7 @@ const RecipeForm = ({
         />
       </div>
       <FormikProvider value={formik}>
-        <form>
+        <form className="max-w-screen-sm">
           <div className="font-semibold mt-4 mb-2">Main</div>
           <TextField
             id="title"
@@ -126,7 +137,7 @@ const RecipeForm = ({
                   >
                     <TextField
                       id={`steps.${index}.title`}
-                      title="Step title asdasd"
+                      title="Title"
                       placeholder="step title"
                       onChange={handleChange}
                       value={values.steps[index].title}
@@ -134,7 +145,7 @@ const RecipeForm = ({
                     />
                     <TextAreaField
                       id={`steps.${index}.text`}
-                      title="Step text"
+                      title="Text"
                       placeholder="step text"
                       onChange={handleChange}
                       value={values.steps[index].text}

@@ -9,11 +9,14 @@ import {
   createRecipe,
   deactivateRecipe,
   fetchRecipeById,
+  ICreateRecipeBodyParams,
+  IUpdateRecipeBodyParams,
   removeRecipeById,
   updateRecipe,
 } from '../../api/recipe';
 import { IRecipe } from '../../interfaces';
 import { IActionInfo } from '../../components/action-buttons';
+import { getCommonMutationGenerator } from '../../common-mutations';
 
 export interface IRecipePageProps {
   id?: string;
@@ -41,31 +44,16 @@ const Recipe = ({ id }: IRecipePageProps) => {
     navigation({ to: '/recipes', replace: true });
   }
 
-  const onError = () => toast.error('Something went wrong...');
-
-  const createMutation = useMutation(createRecipe, {
-    onSuccess: (created: IRecipe) => {
-      toast.success('Recipe was created');
-      queryClient.setQueryData<IRecipe[]>(['recipes'], (old) => {
-        return [...(old || []), created];
-      });
-
-      navigation({ to: `/recipes/${created.id}`, replace: true });
-    },
-    onError,
+  const { getCreateMutation, getUpdateMutation } =
+    getCommonMutationGenerator<IRecipe>({
+      queryClient,
+      entityName: 'recipe',
+    });
+  const createMutation = getCreateMutation<ICreateRecipeBodyParams>({
+    mainFunc: createRecipe,
   });
-
-  const updateMutation = useMutation(updateRecipe, {
-    onSuccess: (updated: IRecipe) => {
-      toast.success('Recipe was updated');
-      queryClient.setQueryData<IRecipe[]>(['recipes'], (old) => {
-        return old.map((r) => (r.id === updated.id ? updated : r));
-      });
-      queryClient.setQueryData<IRecipe>(['recipes', id], () => {
-        return updated;
-      });
-    },
-    onError,
+  const updateMutation = getUpdateMutation<IUpdateRecipeBodyParams>({
+    mainFunc: updateRecipe,
   });
 
   const handleSubmit = useCallback(
@@ -82,7 +70,7 @@ const Recipe = ({ id }: IRecipePageProps) => {
 
     location.history.back();
   };
-  const onErrorDelete = () => toast.error('Something went wrong...');
+  const onErrorDelete = () => toast.error('Can not delete recipe');
 
   const removeMutation = useMutation(removeRecipeById, {
     onSuccess: onSuccessDelete,
@@ -155,9 +143,11 @@ const Recipe = ({ id }: IRecipePageProps) => {
       label: 'Delete',
       name: 'delete',
       action: handleDelete,
+
       hidden: !id,
     },
   ];
+
   return <RecipeForm {...data} onSubmit={handleSubmit} actions={actions} />;
 };
 

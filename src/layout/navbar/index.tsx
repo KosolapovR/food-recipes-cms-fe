@@ -65,7 +65,7 @@ function Navbar() {
   ];
 
   return (
-    <nav className="fixed z-10 w-40 md:w-52 h-full bg-zinc-700 p-6 mt-16 shadow-md">
+    <nav className="fixed z-10 w-52 h-full bg-zinc-700 p-6 mt-16 shadow-md">
       {blocks.map((block, index) => (
         <NavbarBlock key={index} {...block} />
       ))}

@@ -63,7 +63,7 @@ const Login = () => {
             title={'Submit'}
             onClick={() => handleSubmit()}
             isLoading={mutation.isLoading}
-            className="mt-4"
+            className="w-full mt-4"
           />
         </form>
       </div>

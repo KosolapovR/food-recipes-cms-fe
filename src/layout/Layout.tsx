@@ -22,11 +22,11 @@ const Layout = ({ children }: ILayoutProps) => {
         <Navbar />
         <div
           onClick={onBack}
-          className="fixed min-h-screen w-10 flex items-center justify-center shadow-lg cursor-pointer hover:bg-blue-50 mt-16 ml-40 md:ml-52"
+          className="fixed min-h-screen w-10 flex items-center justify-center shadow-lg cursor-pointer bg-white hover:bg-blue-50 mt-16 ml-52"
         >
           <ChevronLeft fill={'#555555'} />
         </div>
-        <main className="ml-60 md:ml-62 mt-16 bg-slate-50 p-6 w-full mr-10">
+        <main className="ml-60 md:ml-62 mt-16 bg-slate-50 p-6 w-full min-w-480px mr-10">
           {children}
         </main>
         <div

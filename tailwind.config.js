@@ -8,6 +8,10 @@ module.exports = {
       },
       minWidth: {
         40: '10rem',
+        '480px': '480px',
+      },
+      borderBottom: {
+        1: '1px',
       },
     },
   },

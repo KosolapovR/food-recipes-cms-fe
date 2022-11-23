@@ -1,14 +1,14 @@
 import React, { useCallback } from 'react';
+import { useNavigate } from '@tanstack/react-location';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 import CommentIcon from '../icons/comment.svg';
 import EyeIcon from '../icons/eye.svg';
 import Button from '../button';
 import { IRecipe, RecipeStatusType } from '../../interfaces/IRecipe';
-import cn from 'classnames';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'react-toastify';
 import { removeRecipeById } from '../../api/recipe';
-import { useNavigate } from '@tanstack/react-location';
+import Status from '../status';
 
 export interface IRecipeCard {
   id: string;
@@ -55,12 +55,7 @@ const RecipeCard = ({
     <div className="flex flex-col justify-s h-80 bg-white shadow-md hover:shadow-lg hover:bg-green-50 rounded rounded-lg">
       <div className="pt-4 px-4">
         <div className="flex justify-end h-6">
-          <div
-            className={cn(
-              'h-2 w-2 rounded rounded-max',
-              status === 'active' ? 'bg-green-400' : 'bg-red-600'
-            )}
-          />
+          <Status status={status} />
         </div>
       </div>
       <div
