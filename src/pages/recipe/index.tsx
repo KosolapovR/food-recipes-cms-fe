@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { toast } from 'react-toastify';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useLocation, useNavigate } from '@tanstack/react-location';
+import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-location';
 
 import { RecipeForm } from '../../components/forms';
 import {
@@ -22,10 +22,8 @@ export interface IRecipePageProps {
   id?: string;
 }
 
-const Recipe = ({ id }: IRecipePageProps) => {
-  const queryClient = useQueryClient();
+const RecipePage = ({ id }: IRecipePageProps) => {
   const navigation = useNavigate();
-  const location = useLocation();
 
   const { data, error } = useQuery(['recipes', id], fetchRecipeById, {
     initialData: {
@@ -44,16 +42,29 @@ const Recipe = ({ id }: IRecipePageProps) => {
     navigation({ to: '/recipes', replace: true });
   }
 
-  const { getCreateMutation, getUpdateMutation } =
-    getCommonMutationGenerator<IRecipe>({
-      queryClient,
-      entityName: 'recipe',
-    });
+  const {
+    getCreateMutation,
+    getUpdateMutation,
+    getDeactivateMutation,
+    getActivateMutation,
+    getRemoveMutation,
+  } = getCommonMutationGenerator<IRecipe>({
+    entityName: 'recipe',
+  });
   const createMutation = getCreateMutation<ICreateRecipeBodyParams>({
     mainFunc: createRecipe,
   });
   const updateMutation = getUpdateMutation<IUpdateRecipeBodyParams>({
     mainFunc: updateRecipe,
+  });
+  const activateMutation = getActivateMutation<{ id: string }>({
+    mainFunc: activateRecipe,
+  });
+  const deactivateMutation = getDeactivateMutation<{ id: string }>({
+    mainFunc: deactivateRecipe,
+  });
+  const removeMutation = getRemoveMutation<{ id: string }>({
+    mainFunc: removeRecipeById,
   });
 
   const handleSubmit = useCallback(
@@ -61,61 +72,13 @@ const Recipe = ({ id }: IRecipePageProps) => {
     [id]
   );
 
-  const onSuccessDelete = () => {
-    toast.success('Recipe was deleted');
-
-    queryClient.setQueryData<IRecipe[]>(['recipes'], (old) => {
-      return old.filter((r) => r.id.toString() !== id);
-    });
-
-    location.history.back();
-  };
-  const onErrorDelete = () => toast.error('Can not delete recipe');
-
-  const removeMutation = useMutation(removeRecipeById, {
-    onSuccess: onSuccessDelete,
-    onError: onErrorDelete,
-  });
-
   const handleDelete = useCallback(() => {
-    removeMutation.mutate(id.toString());
+    removeMutation.mutate({ id });
   }, [id]);
-
-  const onSuccessActivate = (updated: IRecipe) => {
-    toast.success('Recipe was activated');
-    queryClient.setQueryData<IRecipe[]>(['recipes'], (old) => {
-      return old?.map((r) => (r.id === updated.id ? updated : r));
-    });
-    queryClient.setQueryData<IRecipe>(['recipes', id], () => {
-      return updated;
-    });
-  };
-  const onErrorActivate = () => toast.error('Can not activate recipe');
-
-  const activateMutation = useMutation(activateRecipe, {
-    onSuccess: onSuccessActivate,
-    onError: onErrorActivate,
-  });
 
   const handleActivate = useCallback(() => {
     activateMutation.mutate({ id });
   }, [id]);
-
-  const onSuccessDeactivate = (updated: IRecipe) => {
-    toast.success('Recipe was deactivated');
-    queryClient.setQueryData<IRecipe[]>(['recipes'], (old) => {
-      return old?.map((r) => (r.id === updated.id ? updated : r));
-    });
-    queryClient.setQueryData<IRecipe>(['recipes', id], () => {
-      return updated;
-    });
-  };
-  const onErrorDeactivate = () => toast.error('Can not deactivate recipe');
-
-  const deactivateMutation = useMutation(deactivateRecipe, {
-    onSuccess: onSuccessDeactivate,
-    onError: onErrorDeactivate,
-  });
 
   const handleDeactivate = useCallback(() => {
     deactivateMutation.mutate({ id });
@@ -151,4 +114,4 @@ const Recipe = ({ id }: IRecipePageProps) => {
   return <RecipeForm {...data} onSubmit={handleSubmit} actions={actions} />;
 };
 
-export default Recipe;
+export default RecipePage;

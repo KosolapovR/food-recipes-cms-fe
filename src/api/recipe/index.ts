@@ -21,8 +21,8 @@ export async function fetchRecipeById({ queryKey }: QueryFunctionContext) {
   return res;
 }
 
-export async function removeRecipeById(id: string) {
-  const { status } = await axios.post(`${baseUrl}/recipe/Delete`, { id });
+export async function removeRecipeById(body: { id: string }) {
+  const { status } = await axios.post(`${baseUrl}/recipe/Delete`, body);
   return status;
 }
 

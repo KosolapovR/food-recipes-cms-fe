@@ -22,7 +22,10 @@ export const getSaveMutation = <TData extends { id: number }, TVariables>({
           return [...(old || []), saveResult];
         });
 
-        navigation({ to: `/${entityName}s/${saveResult.id}`, replace: true });
+        navigation({
+          to: `/${entityName}s/${saveResult.id.toString()}`,
+          replace: true,
+        });
       } else {
         queryClient.setQueryData<TData[]>([`${entityName}s`], (old) => {
           return (old || []).map((r) =>
@@ -30,7 +33,7 @@ export const getSaveMutation = <TData extends { id: number }, TVariables>({
           );
         });
         queryClient.setQueryData<TData>(
-          [`${entityName}s`, saveResult.id],
+          [`${entityName}s`, saveResult.id.toString()],
           () => {
             return saveResult;
           }

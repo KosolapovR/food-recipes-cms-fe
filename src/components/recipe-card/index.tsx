@@ -44,7 +44,7 @@ const RecipeCard = ({
   });
 
   const handleDelete = useCallback(() => {
-    mutation.mutate(id);
+    mutation.mutate({ id });
   }, [id]);
 
   const handleEdit = useCallback(() => {
