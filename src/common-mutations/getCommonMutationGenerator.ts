@@ -2,17 +2,17 @@ import { QueryClient } from '@tanstack/react-query';
 import { getSaveMutation } from './get-save-mutation';
 import { BaseFuncType } from '../interfaces';
 import { getChangeStatusMutation } from './get-change-status-mutation';
-import { getRemoveMutation } from './get-remove-mutation';
+import { generateRemoveMutation } from './get-remove-mutation';
 
 export const getCommonMutationGenerator = <TData extends { id: number }>({
+  queryClient,
   entityName,
 }: {
+  queryClient: QueryClient;
   entityName: string;
 }) => {
-  const queryClient = new QueryClient();
-
   return {
-    getUpdateMutation: <TVariables>({
+    generateUpdateMutation: <TVariables>({
       mainFunc,
     }: {
       mainFunc: BaseFuncType<TData, TVariables>;
@@ -23,7 +23,7 @@ export const getCommonMutationGenerator = <TData extends { id: number }>({
         mainFunc,
         isCreate: false,
       }),
-    getCreateMutation: <TVariables>({
+    generateCreateMutation: <TVariables>({
       mainFunc,
     }: {
       mainFunc: BaseFuncType<TData, TVariables>;
@@ -34,7 +34,7 @@ export const getCommonMutationGenerator = <TData extends { id: number }>({
         mainFunc,
         isCreate: true,
       }),
-    getActivateMutation: <TVariables>({
+    generateActivateMutation: <TVariables>({
       mainFunc,
     }: {
       mainFunc: BaseFuncType<TData, TVariables>;
@@ -46,7 +46,7 @@ export const getCommonMutationGenerator = <TData extends { id: number }>({
         errorMsg: `Can't activate ${entityName}`,
         successMsg: `${entityName} was activated`,
       }),
-    getDeactivateMutation: <TVariables>({
+    generateDeactivateMutation: <TVariables>({
       mainFunc,
     }: {
       mainFunc: BaseFuncType<TData, TVariables>;
@@ -58,12 +58,12 @@ export const getCommonMutationGenerator = <TData extends { id: number }>({
         errorMsg: `Can't deactivate ${entityName}`,
         successMsg: `${entityName} was deactivated`,
       }),
-    getRemoveMutation: <TVariables>({
+    generateRemoveMutation: <TVariables>({
       mainFunc,
     }: {
       mainFunc: BaseFuncType<number, TVariables>;
     }) =>
-      getRemoveMutation<number, TVariables>({
+      generateRemoveMutation<number, TVariables>({
         entityName,
         mainFunc,
       }),

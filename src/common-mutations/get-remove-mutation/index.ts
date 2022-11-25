@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
 import { useLocation } from '@tanstack/react-location';
 
-export const getRemoveMutation = <TData, TVariables>({
+export const generateRemoveMutation = <TData, TVariables>({
   mainFunc,
   entityName,
 }: {

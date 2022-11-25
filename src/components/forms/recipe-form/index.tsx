@@ -7,8 +7,8 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { IUpdateRecipeBodyParams } from '../../../api/recipe';
 import { TextAreaField, TextField } from '../../index';
 import FieldsBlock from '../../fields-block';
-import ActionButtons, { IActionInfo } from '../../action-buttons';
-import Status from '../../status';
+import { IActionInfo } from '../../action-buttons';
+import FormHeader from '../../form-header';
 
 const RecipeStepSchema = Yup.object().shape({
   title: Yup.string().min(2, 'Min length 2').max(255, 'Max length 255'),
@@ -44,7 +44,6 @@ const RecipeForm = ({
       onSubmit(params);
     },
   });
-
   const {
     handleSubmit,
     handleChange,
@@ -83,34 +82,16 @@ const RecipeForm = ({
 
   return (
     <>
-      <div className="flex justify-between space-x-4 pb-4 border-b-gray-300 border-b sticky top-16">
-        <div>
-          <span className="truncate">
-            {id
-              ? `Recipe ${title}`
-              : `New Recipe ${values.title ? values.title : ''}`}
-          </span>
-
-          {id && (
-            <div className="flex space-x-2 items-center uppercase">
-              <Status status={status} />
-              <span>{status}</span>
-            </div>
-          )}
-        </div>
-        <ActionButtons
-          actions={actions.map((a) =>
-            a.name === 'save'
-              ? {
-                  ...a,
-                  action: () => {
-                    handleSubmit();
-                  },
-                }
-              : a
-          )}
-        />
-      </div>
+      <FormHeader
+        title={
+          id
+            ? `Recipe ${title}`
+            : `New Recipe ${values.title ? values.title : ''}`
+        }
+        actions={actions}
+        onSave={handleSubmit}
+        status={id ? status : undefined}
+      />
       <FormikProvider value={formik}>
         <form className="max-w-screen-sm">
           <div className="font-semibold mt-4 mb-2">Main</div>

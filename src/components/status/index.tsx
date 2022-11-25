@@ -3,7 +3,7 @@ import cn from 'classnames';
 import { RecipeStatusType } from '../../interfaces/IRecipe';
 
 export interface IStatusProps {
-  status: RecipeStatusType;
+  status: RecipeStatusType | string;
 }
 
 const Status = ({ status }: IStatusProps) => (

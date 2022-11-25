@@ -15,7 +15,8 @@ export async function fetchRecipes({ queryKey }: QueryFunctionContext) {
 }
 
 export async function fetchRecipeById({ queryKey }: QueryFunctionContext) {
-  const [_key, id] = queryKey;
+  const [_key, params] = queryKey;
+  const { id } = params as { id: string };
   const { data } = await axios.get(`${baseUrl}/recipe/${id}`);
   const res: IRecipe = data.data;
   return res;
@@ -37,7 +38,6 @@ export interface IUpdateRecipeBodyParams extends ICreateRecipeBodyParams {
 }
 
 export async function createRecipe(body: ICreateRecipeBodyParams) {
-  console.log('body', body);
   const { data } = await axios.post(`${baseUrl}/recipe/Create`, body);
   const res: IRecipe = data.data;
   return res;

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { toast } from 'react-toastify';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-location';
 
 import { RecipeForm } from '../../components/forms';
@@ -25,7 +25,7 @@ export interface IRecipePageProps {
 const RecipePage = ({ id }: IRecipePageProps) => {
   const navigation = useNavigate();
 
-  const { data, error } = useQuery(['recipes', id], fetchRecipeById, {
+  const { data, error } = useQuery(['recipes', { id }], fetchRecipeById, {
     initialData: {
       id: undefined,
       title: undefined,
@@ -41,29 +41,31 @@ const RecipePage = ({ id }: IRecipePageProps) => {
     toast.error('Something went wrong...');
     navigation({ to: '/recipes', replace: true });
   }
+  const queryClient = useQueryClient();
 
   const {
-    getCreateMutation,
-    getUpdateMutation,
-    getDeactivateMutation,
-    getActivateMutation,
-    getRemoveMutation,
+    generateCreateMutation,
+    generateUpdateMutation,
+    generateDeactivateMutation,
+    generateActivateMutation,
+    generateRemoveMutation,
   } = getCommonMutationGenerator<IRecipe>({
+    queryClient,
     entityName: 'recipe',
   });
-  const createMutation = getCreateMutation<ICreateRecipeBodyParams>({
+  const createMutation = generateCreateMutation<ICreateRecipeBodyParams>({
     mainFunc: createRecipe,
   });
-  const updateMutation = getUpdateMutation<IUpdateRecipeBodyParams>({
+  const updateMutation = generateUpdateMutation<IUpdateRecipeBodyParams>({
     mainFunc: updateRecipe,
   });
-  const activateMutation = getActivateMutation<{ id: string }>({
+  const activateMutation = generateActivateMutation<{ id: string }>({
     mainFunc: activateRecipe,
   });
-  const deactivateMutation = getDeactivateMutation<{ id: string }>({
+  const deactivateMutation = generateDeactivateMutation<{ id: string }>({
     mainFunc: deactivateRecipe,
   });
-  const removeMutation = getRemoveMutation<{ id: string }>({
+  const removeMutation = generateRemoveMutation<{ id: string }>({
     mainFunc: removeRecipeById,
   });
 

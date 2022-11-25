@@ -18,12 +18,7 @@ import {
   AuthTokenContext,
   IAuthTokenContext,
 } from './context/auth-token-context';
-import {
-  fetchRecipes,
-  fetchRecipeById,
-  fetchUsers,
-  fetchUserById,
-} from './api';
+import { fetchRecipes, fetchUsers } from './api';
 import { API_TOKEN } from './const';
 import Login from './pages/login';
 
@@ -98,16 +93,6 @@ const App = () => {
                     element: async ({ params }) => (
                       <Recipe id={params.recipeId} />
                     ),
-                    loader: ({
-                      params: { recipeId },
-                    }: {
-                      params: { recipeId: string };
-                    }) =>
-                      queryClient.getQueryData(['recipes', recipeId]) ??
-                      queryClient.fetchQuery(
-                        ['recipes', recipeId],
-                        fetchRecipeById
-                      ),
                   },
                 ],
               },
@@ -124,15 +109,6 @@ const App = () => {
                   {
                     path: ':userId',
                     element: <User />,
-                    loader: ({
-                      params: { userId },
-                    }: {
-                      params: { userId: string };
-                    }) =>
-                      queryClient.getQueryData(['users', userId]) ??
-                      queryClient.fetchQuery(['users', userId], () =>
-                        fetchUserById(userId)
-                      ),
                   },
                 ],
               },

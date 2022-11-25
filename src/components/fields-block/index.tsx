@@ -40,8 +40,8 @@ const FieldsBlock = ({
         <div className="p-4 bg-sky-100 rounded-lg w-1/1">
           <div className="flex gap-2 justify-between">
             <div>
-              {children.map((c) => (
-                <div className="flex gap-2">
+              {children.map((c, idx) => (
+                <div key={idx} className="flex gap-2">
                   <p className="max-h-28 overflow-y-auto w-40 min-w-40">
                     {c.props?.title}
                   </p>

@@ -24,10 +24,8 @@ export const getChangeStatusMutation = <
         return (old || []).map((r) => (r.id === result.id ? result : r));
       });
       queryClient.setQueryData<TData>(
-        [`${entityName}s`, result.id.toString()],
-        () => {
-          return result;
-        }
+        [`${entityName}s`, { id: result.id.toString() }],
+        result
       );
     },
     onError: (error) => {
