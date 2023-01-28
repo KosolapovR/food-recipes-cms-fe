@@ -1,8 +1,12 @@
 import { toast } from 'react-toastify';
 import { QueryClient, useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-location';
+import { CommonSingleActionBodyType } from '../../interfaces';
 
-export const getSaveMutation = <TData extends { id: number }, TVariables>({
+export const getSaveMutation = <
+  TData extends CommonSingleActionBodyType,
+  TVariables
+>({
   queryClient,
   mainFunc,
   entityName,
@@ -33,7 +37,7 @@ export const getSaveMutation = <TData extends { id: number }, TVariables>({
           );
         });
         queryClient.setQueryData<TData>(
-          [`${entityName}s`, saveResult.id.toString()],
+          [`${entityName}s`, saveResult.id],
           () => {
             return saveResult;
           }

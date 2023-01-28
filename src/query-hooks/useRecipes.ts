@@ -1,15 +1,19 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { IRecipe } from '../interfaces';
+import { IRecipeGroupDTO, ActivationUnionStatusType } from '../interfaces';
 import { fetchRecipes } from '../api';
-import { RecipeStatusType } from '../interfaces/IRecipe';
 
-export const useRecipes = ({ status }: { status?: RecipeStatusType }) => {
+export const useRecipes = ({
+  status,
+}: {
+  status?: ActivationUnionStatusType;
+}) => {
   const queryClient = useQueryClient();
   const queryKey = status ? ['recipes', status] : ['recipes'];
-  return useQuery<IRecipe[]>({
+  return useQuery<IRecipeGroupDTO[]>({
     queryKey,
     queryFn: fetchRecipes,
-    initialData: () => queryClient.getQueryData<IRecipe[]>(queryKey) || [],
+    initialData: () =>
+      queryClient.getQueryData<IRecipeGroupDTO[]>(queryKey) || [],
   });
 };

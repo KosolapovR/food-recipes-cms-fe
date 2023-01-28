@@ -3,15 +3,15 @@ import { useNavigate } from '@tanstack/react-location';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 import { Tabs, RecipeCard, Button } from '../../components';
+import { ActivationUnionStatusType } from '../../interfaces';
 import { useRecipes } from '../../query-hooks';
-import { RecipeStatusType } from '../../interfaces/IRecipe';
 
 const Recipes = () => {
   const navigate = useNavigate();
 
   const [parent] = useAutoAnimate<HTMLDivElement>(/* optional config */);
 
-  const [tab, setTab] = useState<RecipeStatusType>();
+  const [tab, setTab] = useState<ActivationUnionStatusType>();
 
   const { data } = useRecipes({ status: tab });
 
@@ -45,15 +45,12 @@ const Recipes = () => {
         ref={parent}
         className="max-w-screen-xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-3 xl:gap-5"
       >
-        {data.map((r) => (
+        {data.map((recipe) => (
           <RecipeCard
-            key={r.id}
-            id={r.id.toString()}
-            title={r.title}
-            commentsCount={r.comments.length}
-            status={r.status}
+            key={recipe.id}
+            {...recipe}
+            commentsCount={0}
             viewCount={0}
-            imageSrc={r.previewImagePath}
           />
         ))}
       </div>

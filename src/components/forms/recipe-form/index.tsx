@@ -4,11 +4,11 @@ import * as Yup from 'yup';
 import { usePrompt } from '@tanstack/react-location';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 
-import { IUpdateRecipeBodyParams } from '../../../api/recipe';
 import { TextAreaField, TextField } from '../../index';
 import FieldsBlock from '../../fields-block';
 import { IActionInfo } from '../../action-buttons';
 import FormHeader from '../../form-header';
+import { IRecipeSingleDTO, IRecipeUpdateDTO } from '../../../interfaces';
 
 const RecipeStepSchema = Yup.object().shape({
   title: Yup.string().min(2, 'Min length 2').max(255, 'Max length 255'),
@@ -20,25 +20,20 @@ const validationSchema = Yup.object().shape({
     .min(2, 'Min length 2')
     .max(255, 'Max length 255')
     .required('Required'),
+  categoryId: Yup.string().required('Required'),
   steps: Yup.array(RecipeStepSchema).required('Required'),
 });
 
-export interface IRecipeFormProps extends IUpdateRecipeBodyParams {
-  onSubmit: (values: IUpdateRecipeBodyParams) => void;
+export interface IRecipeFormProps {
+  onSubmit: (values: Partial<IRecipeUpdateDTO>) => void;
   actions: IActionInfo[];
+  data: Partial<IRecipeSingleDTO>;
 }
 
-const RecipeForm = ({
-  id,
-  steps,
-  status,
-  previewImagePath,
-  title,
-  onSubmit,
-  actions,
-}: IRecipeFormProps) => {
+const RecipeForm = ({ onSubmit, actions, data }: IRecipeFormProps) => {
+  const { id, steps, status, previewImagePath, title, categoryId } = data;
   const formik = useFormik({
-    initialValues: { id, title, steps, status, previewImagePath },
+    initialValues: { id, title, categoryId, steps, status, previewImagePath },
     validationSchema,
     onSubmit: (params) => {
       onSubmit(params);
@@ -72,7 +67,9 @@ const RecipeForm = ({
   );
 
   useEffect(() => {
-    resetForm({ values: { id, title, steps, status, previewImagePath } });
+    resetForm({
+      values: { id, title, steps, status, previewImagePath, categoryId },
+    });
   }, [id]);
 
   usePrompt(
@@ -102,6 +99,14 @@ const RecipeForm = ({
             onChange={handleChange}
             value={values.title}
             meta={getFieldMeta('title')}
+          />
+          <TextField
+            id="categoryId"
+            title="CategoryId"
+            placeholder="categoryId"
+            onChange={handleChange}
+            value={values.categoryId}
+            meta={getFieldMeta('categoryId')}
           />
           <div className="font-semibold mt-4 mb-2">Steps</div>
           <FieldArray name="steps">

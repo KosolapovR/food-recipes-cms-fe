@@ -9,20 +9,20 @@ import {
   createRecipe,
   deactivateRecipe,
   fetchRecipeById,
-  ICreateRecipeBodyParams,
-  IUpdateRecipeBodyParams,
   removeRecipeById,
   updateRecipe,
 } from '../../api/recipe';
-import { IRecipe } from '../../interfaces';
+import {
+  IRecipeSingleDTO,
+  CommonSingleActionBodyType,
+  IdRouteParams,
+  IRecipeCreateDTO,
+  IRecipeUpdateDTO,
+} from '../../interfaces';
 import { IActionInfo } from '../../components/action-buttons';
 import { getCommonMutationGenerator } from '../../common-mutations';
 
-export interface IRecipePageProps {
-  id?: string;
-}
-
-const RecipePage = ({ id }: IRecipePageProps) => {
+const RecipePage = ({ id }: IdRouteParams) => {
   const navigation = useNavigate();
 
   const { data, error } = useQuery(['recipes', { id }], fetchRecipeById, {
@@ -31,6 +31,7 @@ const RecipePage = ({ id }: IRecipePageProps) => {
       title: undefined,
       steps: [],
       comments: [],
+      categoryId: '',
       status: 'inactive',
       previewImagePath: undefined,
     },
@@ -49,23 +50,26 @@ const RecipePage = ({ id }: IRecipePageProps) => {
     generateDeactivateMutation,
     generateActivateMutation,
     generateRemoveMutation,
-  } = getCommonMutationGenerator<IRecipe>({
+  } = getCommonMutationGenerator<IRecipeSingleDTO>({
     queryClient,
     entityName: 'recipe',
   });
-  const createMutation = generateCreateMutation<ICreateRecipeBodyParams>({
+  const createMutation = generateCreateMutation<IRecipeCreateDTO>({
     mainFunc: createRecipe,
   });
-  const updateMutation = generateUpdateMutation<IUpdateRecipeBodyParams>({
+  const updateMutation = generateUpdateMutation<IRecipeUpdateDTO>({
     mainFunc: updateRecipe,
   });
-  const activateMutation = generateActivateMutation<{ id: string }>({
-    mainFunc: activateRecipe,
-  });
-  const deactivateMutation = generateDeactivateMutation<{ id: string }>({
-    mainFunc: deactivateRecipe,
-  });
-  const removeMutation = generateRemoveMutation<{ id: string }>({
+  const activateMutation = generateActivateMutation<CommonSingleActionBodyType>(
+    {
+      mainFunc: activateRecipe,
+    }
+  );
+  const deactivateMutation =
+    generateDeactivateMutation<CommonSingleActionBodyType>({
+      mainFunc: deactivateRecipe,
+    });
+  const removeMutation = generateRemoveMutation<CommonSingleActionBodyType>({
     mainFunc: removeRecipeById,
   });
 
@@ -113,7 +117,7 @@ const RecipePage = ({ id }: IRecipePageProps) => {
     },
   ];
 
-  return <RecipeForm {...data} onSubmit={handleSubmit} actions={actions} />;
+  return <RecipeForm data={data} onSubmit={handleSubmit} actions={actions} />;
 };
 
 export default RecipePage;

@@ -6,17 +6,13 @@ import { toast } from 'react-toastify';
 import CommentIcon from '../icons/comment.svg';
 import EyeIcon from '../icons/eye.svg';
 import Button from '../button';
-import { IRecipe, RecipeStatusType } from '../../interfaces/IRecipe';
+import { IRecipeGroupDTO } from '../../interfaces';
 import { removeRecipeById } from '../../api/recipe';
 import Status from '../status';
 
-export interface IRecipeCard {
-  id: string;
-  title: string;
-  status: RecipeStatusType;
+export interface IRecipeCard extends IRecipeGroupDTO {
   commentsCount: number;
   viewCount: number;
-  imageSrc: string;
 }
 
 const RecipeCard = ({
@@ -32,8 +28,8 @@ const RecipeCard = ({
   const onSuccessDelete = () => {
     toast.success('Recipe was deleted');
 
-    queryClient.setQueryData<IRecipe[]>(['recipes'], (old) => {
-      return old.filter((r) => r.id.toString() !== id);
+    queryClient.setQueryData<IRecipeGroupDTO[]>(['recipes'], (old) => {
+      return old.filter((r) => r.id !== id);
     });
   };
   const onErrorDelete = () => toast.error('Something went wrong...');
@@ -44,7 +40,7 @@ const RecipeCard = ({
   });
 
   const handleDelete = useCallback(() => {
-    mutation.mutate({ id });
+    mutation.mutate({ id: id });
   }, [id]);
 
   const handleEdit = useCallback(() => {

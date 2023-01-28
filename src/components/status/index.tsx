@@ -1,9 +1,9 @@
 import React from 'react';
 import cn from 'classnames';
-import { RecipeStatusType } from '../../interfaces/IRecipe';
+import { ActivationUnionStatusType } from '../../interfaces';
 
 export interface IStatusProps {
-  status: RecipeStatusType | string;
+  status: ActivationUnionStatusType;
 }
 
 const Status = ({ status }: IStatusProps) => (

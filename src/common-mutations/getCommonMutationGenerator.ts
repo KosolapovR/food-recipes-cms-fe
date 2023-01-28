@@ -4,7 +4,7 @@ import { BaseFuncType } from '../interfaces';
 import { getChangeStatusMutation } from './get-change-status-mutation';
 import { generateRemoveMutation } from './get-remove-mutation';
 
-export const getCommonMutationGenerator = <TData extends { id: number }>({
+export const getCommonMutationGenerator = <TData extends { id: string }>({
   queryClient,
   entityName,
 }: {

@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 import { QueryClient, useMutation } from '@tanstack/react-query';
 
 export const getChangeStatusMutation = <
-  TData extends { id: number },
+  TData extends { id: string },
   TVariables
 >({
   queryClient,
