@@ -12,15 +12,13 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Layout from './layout/Layout';
-import { Dashboard, Recipe, Recipes, User } from './pages';
-import Users from './pages/users';
+import { Dashboard, Recipe, Recipes, User, Users, Login } from './pages';
 import {
   AuthTokenContext,
   IAuthTokenContext,
 } from './context/auth-token-context';
 import { fetchRecipes, fetchUsers } from './api';
 import { API_TOKEN } from './const';
-import Login from './pages/login';
 
 type LocationGenerics = MakeGenerics<{
   Params: { recipeId: string; userId: string };
@@ -104,11 +102,11 @@ const App = () => {
                     element: <Users />,
                     loader: () =>
                       queryClient.getQueryData(['users']) ??
-                      queryClient.fetchQuery(['users'], () => fetchUsers()),
+                      queryClient.fetchQuery(['users'], fetchUsers),
                   },
                   {
                     path: ':userId',
-                    element: <User />,
+                    element: async ({ params }) => <User id={params.userId} />,
                   },
                 ],
               },

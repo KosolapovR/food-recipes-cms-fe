@@ -1,3 +1,4 @@
 import { useRecipes } from './useRecipes';
+import { useUsers } from './useUsers';
 
-export { useRecipes };
+export { useRecipes, useUsers };

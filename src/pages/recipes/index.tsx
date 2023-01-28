@@ -34,8 +34,8 @@ const Recipes = () => {
       <Tabs
         options={[
           { value: undefined, label: 'ALL RECIPES' },
-          { value: 'Active', label: 'ACTIVE', badgeFill: 'success' },
-          { value: 'Inactive', label: 'INACTIVE', badgeFill: 'critic' },
+          { value: 'active', label: 'ACTIVE', badgeFill: 'success' },
+          { value: 'inactive', label: 'INACTIVE', badgeFill: 'critic' },
         ]}
         value={tab}
         onChange={handleChangeTab}
