@@ -13,14 +13,15 @@ import {
   updateRecipe,
 } from '../../api/recipe';
 import {
-  IRecipeSingleDTO,
   CommonSingleActionBodyType,
   IdRouteParams,
   IRecipeCreateDTO,
+  IRecipeSingleDTO,
   IRecipeUpdateDTO,
 } from '../../interfaces';
 import { IActionInfo } from '../../components/action-buttons';
 import { getCommonMutationGenerator } from '../../common-mutations';
+import { useAuth } from '../../query-hooks';
 
 const RecipePage = ({ id }: IdRouteParams) => {
   const navigation = useNavigate();
@@ -43,6 +44,7 @@ const RecipePage = ({ id }: IdRouteParams) => {
     navigation({ to: '/recipes', replace: true });
   }
   const queryClient = useQueryClient();
+  const { isAdmin } = useAuth();
 
   const {
     generateCreateMutation,
@@ -100,20 +102,19 @@ const RecipePage = ({ id }: IdRouteParams) => {
       label: 'Activate',
       name: 'activate',
       action: handleActivate,
-      hidden: !id || data.status === 'active',
+      hidden: !id || data.status === 'active' || !isAdmin,
     },
     {
       label: 'Deactivate',
       name: 'deactivate',
       action: handleDeactivate,
-      hidden: !id || data.status === 'inactive',
+      hidden: !id || data.status === 'inactive' || !isAdmin,
     },
     {
       label: 'Delete',
       name: 'delete',
       action: handleDelete,
-
-      hidden: !id,
+      hidden: !id || !isAdmin,
     },
   ];
 

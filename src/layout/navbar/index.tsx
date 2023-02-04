@@ -14,13 +14,11 @@ import {
   useMatchRoute,
 } from '@tanstack/react-location';
 import Spinner from '../../components/spinner';
-import { useQueryClient } from '@tanstack/react-query';
-import { IAuth } from '../../interfaces';
+import { useAuth } from '../../query-hooks';
 
 function Navbar() {
   const loadRoute = useLoadRoute();
-  const queryClient = useQueryClient();
-  const authData = queryClient.getQueryData<IAuth>(['auth']);
+  const { isAdmin } = useAuth();
 
   const blocks: INavbarBlock[] = [
     {
@@ -52,7 +50,7 @@ function Navbar() {
     },
     {
       title: 'SETTINGS',
-      hidden: !authData?.isAdmin,
+      hidden: !isAdmin,
       items: [
         {
           value: 'users',

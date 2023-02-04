@@ -10,7 +10,7 @@ import {
 import { Dashboard, Login, Recipe, Recipes, User, Users } from './pages';
 import { fetchRecipes, fetchUsers } from './api';
 import { useQueryClient } from '@tanstack/react-query';
-import { IAuth } from './interfaces';
+import { useAuth } from './query-hooks';
 
 export interface IRouterProps {
   token?: string;
@@ -18,7 +18,7 @@ export interface IRouterProps {
 }
 const AppRouter = ({ token, location }: IRouterProps) => {
   const queryClient = useQueryClient();
-  const authData = queryClient.getQueryData<IAuth>(['auth']);
+  const { isAdmin } = useAuth();
 
   const publicRoutes: Route<DefaultGenerics>[] = [
     {
@@ -83,7 +83,7 @@ const AppRouter = ({ token, location }: IRouterProps) => {
     <Router
       location={location}
       basepath={'cms'}
-      routes={authData?.isAdmin ? authorizedRoutes : nonAuthorizedRoutes}
+      routes={isAdmin ? authorizedRoutes : nonAuthorizedRoutes}
     >
       <Layout>
         <Outlet />

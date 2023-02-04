@@ -37,7 +37,7 @@ export const getSaveMutation = <
           );
         });
         queryClient.setQueryData<TData>(
-          [`${entityName}s`, saveResult.id],
+          [`${entityName}s`, { id: saveResult.id.toString() }],
           () => {
             return saveResult;
           }

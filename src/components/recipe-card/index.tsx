@@ -3,11 +3,12 @@ import { useNavigate } from '@tanstack/react-location';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
+import { removeRecipeById } from '../../api/recipe';
+import { IRecipeGroupDTO } from '../../interfaces';
+import { useAuth } from '../../query-hooks';
 import CommentIcon from '../icons/comment.svg';
 import EyeIcon from '../icons/eye.svg';
 import Button from '../button';
-import { IRecipeGroupDTO } from '../../interfaces';
-import { removeRecipeById } from '../../api/recipe';
 import Status from '../status';
 
 export interface IRecipeCard extends IRecipeGroupDTO {
@@ -24,6 +25,7 @@ const RecipeCard = ({
 }: IRecipeCard) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { isAdmin } = useAuth();
 
   const onSuccessDelete = () => {
     toast.success('Recipe was deleted');
@@ -78,13 +80,15 @@ const RecipeCard = ({
           scale="SM"
           variant="outlined"
         />
-        <Button
-          title={'DELETE'}
-          onClick={handleDelete}
-          variant="outlined"
-          color="regular"
-          scale="SM"
-        />
+        {isAdmin && (
+          <Button
+            title={'DELETE'}
+            onClick={handleDelete}
+            variant="outlined"
+            color="regular"
+            scale="SM"
+          />
+        )}
       </div>
     </div>
   );

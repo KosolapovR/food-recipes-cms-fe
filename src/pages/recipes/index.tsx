@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { useNavigate } from '@tanstack/react-location';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 
-import { Tabs, RecipeCard, Button } from '../../components';
+import { Button, RecipeCard, Tabs } from '../../components';
 import { ActivationUnionStatusType } from '../../interfaces';
 import { useRecipes } from '../../query-hooks';
 
