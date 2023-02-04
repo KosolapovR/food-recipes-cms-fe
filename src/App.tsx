@@ -4,6 +4,7 @@ import {
   MakeGenerics,
   Outlet,
   ReactLocation,
+  Route,
   Router,
 } from '@tanstack/react-location';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -48,7 +49,7 @@ const App = () => {
     function (error: AxiosError) {
       // Any status codes that falls outside the range of 2xx cause this function to trigger
       // Do something with response error
-      if (error.response.status === 403) {
+      if (error.response.status === 401) {
         insertToken(null);
       }
       return Promise.reject(error);
@@ -62,56 +63,52 @@ const App = () => {
     }),
     [token]
   );
+  // eslint-disable-next-line
+  const routes: Route<any>[] = [
+    {
+      path: '/',
+      element: <Dashboard />,
+    },
+    {
+      path: 'recipes',
+      children: [
+        {
+          path: '/',
+          element: <Recipes />,
+          loader: () =>
+            queryClient.getQueryData(['recipes']) ??
+            queryClient.fetchQuery(['recipes'], fetchRecipes),
+        },
+        { path: 'new', element: <Recipe /> },
+        {
+          path: ':recipeId',
+          element: async ({ params }) => <Recipe id={params.recipeId} />,
+        },
+      ],
+    },
+    {
+      path: 'users',
+      children: [
+        {
+          path: '/',
+          element: <Users />,
+          loader: () =>
+            queryClient.getQueryData(['users']) ??
+            queryClient.fetchQuery(['users'], fetchUsers),
+        },
+        {
+          path: ':userId',
+          element: async ({ params }) => <User id={params.userId} />,
+        },
+      ],
+    },
+  ];
 
   return (
     <QueryClientProvider client={queryClient}>
       <AuthTokenContext.Provider value={authContextValue}>
         {token ? (
-          <Router
-            location={location}
-            basepath={'cms'}
-            routes={[
-              {
-                path: '/',
-                element: <Dashboard />,
-              },
-              {
-                path: 'recipes',
-                children: [
-                  {
-                    path: '/',
-                    element: <Recipes />,
-                    loader: () =>
-                      queryClient.getQueryData(['recipes']) ??
-                      queryClient.fetchQuery(['recipes'], fetchRecipes),
-                  },
-                  { path: 'new', element: <Recipe /> },
-                  {
-                    path: ':recipeId',
-                    element: async ({ params }) => (
-                      <Recipe id={params.recipeId} />
-                    ),
-                  },
-                ],
-              },
-              {
-                path: 'users',
-                children: [
-                  {
-                    path: '/',
-                    element: <Users />,
-                    loader: () =>
-                      queryClient.getQueryData(['users']) ??
-                      queryClient.fetchQuery(['users'], fetchUsers),
-                  },
-                  {
-                    path: ':userId',
-                    element: async ({ params }) => <User id={params.userId} />,
-                  },
-                ],
-              },
-            ]}
-          >
+          <Router location={location} basepath={'cms'} routes={routes}>
             <Layout>
               <Outlet />
             </Layout>
