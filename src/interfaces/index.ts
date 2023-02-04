@@ -24,6 +24,7 @@ import {
   CommonUpdateDTOType,
   IdRouteParams,
 } from './common';
+import { IAuth } from './IAuth';
 
 type BaseFuncType<TData, TVariables> = (v: TVariables) => Promise<TData>;
 
@@ -47,4 +48,5 @@ export {
   ActivationUnionStatusType,
   CommonUpdateDTOType,
   IdRouteParams,
+  IAuth,
 };

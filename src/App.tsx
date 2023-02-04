@@ -1,25 +1,16 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import axios, { AxiosError } from 'axios';
-import {
-  MakeGenerics,
-  Outlet,
-  ReactLocation,
-  Route,
-  Router,
-} from '@tanstack/react-location';
+import { MakeGenerics, ReactLocation } from '@tanstack/react-location';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-import Layout from './layout/Layout';
-import { Dashboard, Recipe, Recipes, User, Users, Login } from './pages';
 import {
   AuthTokenContext,
   IAuthTokenContext,
 } from './context/auth-token-context';
-import { fetchRecipes, fetchUsers } from './api';
 import { API_TOKEN } from './const';
+import AppRouter from './AppRouter';
 
 type LocationGenerics = MakeGenerics<{
   Params: { recipeId: string; userId: string };
@@ -63,59 +54,11 @@ const App = () => {
     }),
     [token]
   );
-  // eslint-disable-next-line
-  const routes: Route<any>[] = [
-    {
-      path: '/',
-      element: <Dashboard />,
-    },
-    {
-      path: 'recipes',
-      children: [
-        {
-          path: '/',
-          element: <Recipes />,
-          loader: () =>
-            queryClient.getQueryData(['recipes']) ??
-            queryClient.fetchQuery(['recipes'], fetchRecipes),
-        },
-        { path: 'new', element: <Recipe /> },
-        {
-          path: ':recipeId',
-          element: async ({ params }) => <Recipe id={params.recipeId} />,
-        },
-      ],
-    },
-    {
-      path: 'users',
-      children: [
-        {
-          path: '/',
-          element: <Users />,
-          loader: () =>
-            queryClient.getQueryData(['users']) ??
-            queryClient.fetchQuery(['users'], fetchUsers),
-        },
-        {
-          path: ':userId',
-          element: async ({ params }) => <User id={params.userId} />,
-        },
-      ],
-    },
-  ];
 
   return (
     <QueryClientProvider client={queryClient}>
       <AuthTokenContext.Provider value={authContextValue}>
-        {token ? (
-          <Router location={location} basepath={'cms'} routes={routes}>
-            <Layout>
-              <Outlet />
-            </Layout>
-          </Router>
-        ) : (
-          <Login />
-        )}
+        <AppRouter token={token} location={location} />
         <ToastContainer
           position="bottom-right"
           autoClose={5000}

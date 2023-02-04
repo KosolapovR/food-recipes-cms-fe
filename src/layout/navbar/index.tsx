@@ -14,9 +14,13 @@ import {
   useMatchRoute,
 } from '@tanstack/react-location';
 import Spinner from '../../components/spinner';
+import { useQueryClient } from '@tanstack/react-query';
+import { IAuth } from '../../interfaces';
 
 function Navbar() {
   const loadRoute = useLoadRoute();
+  const queryClient = useQueryClient();
+  const authData = queryClient.getQueryData<IAuth>(['auth']);
 
   const blocks: INavbarBlock[] = [
     {
@@ -48,6 +52,7 @@ function Navbar() {
     },
     {
       title: 'SETTINGS',
+      hidden: !authData?.isAdmin,
       items: [
         {
           value: 'users',
@@ -66,9 +71,11 @@ function Navbar() {
 
   return (
     <nav className="fixed z-10 w-52 h-full bg-zinc-700 p-6 mt-16 shadow-md">
-      {blocks.map((block, index) => (
-        <NavbarBlock key={index} {...block} />
-      ))}
+      {blocks
+        .filter((block) => !block.hidden)
+        .map((block, index) => (
+          <NavbarBlock key={index} {...block} />
+        ))}
     </nav>
   );
 }
@@ -76,6 +83,7 @@ function Navbar() {
 export interface INavbarBlock {
   title: string;
   items: INavbarBlockItem[];
+  hidden?: boolean;
 }
 const NavbarBlock = ({ title, items }: INavbarBlock) => {
   const matchRoute = useMatchRoute();

@@ -3,11 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import MoreIcon from '../../components/icons/more.svg';
 import { AuthTokenContext } from '../../context/auth-token-context';
-
-interface IAuth {
-  email: string;
-  isAdmin?: boolean;
-}
+import { IAuth } from '../../interfaces';
 
 function Header() {
   const { setToken } = useContext(AuthTokenContext);
