@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { Field, FormikProvider, useFormik } from 'formik';
+import { FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 import { usePrompt } from '@tanstack/react-location';
 
-import { TextField } from '../../index';
+import { TextField, Toggle } from '../../index';
 import { IActionInfo } from '../../action-buttons';
 import FormHeader from '../../form-header';
-import { IUserUpdateDTO, IUserSingleDTO } from '../../../interfaces';
+import { IUserSingleDTO, IUserUpdateDTO } from '../../../interfaces';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email('Email is not valid').required('Required'),
@@ -68,11 +68,15 @@ const UserForm = ({ onSubmit, actions, data }: IUserFormProps) => {
             onChange={handleChange}
             value={values.email}
             meta={getFieldMeta('email')}
+            className="mb-4"
           />
-          <label title="Admin">
-            <Field type="checkbox" name="isAdmin" />
-            {`${values.isAdmin}`}
-          </label>
+          <Toggle
+            id="isAdmin"
+            title="Admin"
+            onChange={handleChange}
+            value={values.isAdmin}
+            meta={getFieldMeta('isAdmin')}
+          />
         </form>
       </FormikProvider>
     </>

@@ -5,6 +5,7 @@ import { useNavigate } from '@tanstack/react-location';
 import { Tabs } from '../../components';
 import { ActivationUnionStatusType } from '../../interfaces';
 import { useUsers } from '../../query-hooks';
+import Status from '../../components/status';
 
 const Users = () => {
   const navigate = useNavigate();
@@ -40,18 +41,51 @@ const Users = () => {
         className="mb-4 bg-slate-50 sticky top-16 z-10 -ml-1 -mr-1 px-1"
       />
       <div ref={parent} className="max-w-screen-xl">
-        {data.map((u) => (
-          <div
-            key={u.id}
-            className="flex space-between items-center gap-2 border border-b-2 border-t-2 border-b-gray-500"
-            onClick={() => {
-              handleView(u.id);
-            }}
-          >
-            <span>{u.email}</span>
-            <span>{u.isAdmin ? 'admin' : 'user'}</span>
-          </div>
-        ))}
+        <div className="relative overflow-x-auto">
+          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th scope="col" className="px-6 py-3">
+                  Email
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Role
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 flex space-x-1 justify-end align-middle"
+                >
+                  Status
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((u) => (
+                <tr
+                  key={u.id}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700  hover:bg-gray-100 cursor-pointer"
+                  onClick={() => {
+                    handleView(u.id);
+                  }}
+                >
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    {u.email}
+                  </th>
+                  <td className="px-6 py-4">{u.isAdmin ? 'admin' : 'user'}</td>
+                  <td className="px-6 py-4 flex space-x-1 justify-end items-center">
+                    <Status status={u.status} />{' '}
+                    <span className={'inline-block ml-2'}>
+                      {u.status.toUpperCase()}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
