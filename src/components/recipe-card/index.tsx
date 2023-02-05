@@ -25,7 +25,7 @@ const RecipeCard = ({
 }: IRecipeCard) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { isAdmin } = useAuth();
+  const authData = useAuth();
 
   const onSuccessDelete = () => {
     toast.success('Recipe was deleted');
@@ -80,7 +80,7 @@ const RecipeCard = ({
           scale="SM"
           variant="outlined"
         />
-        {isAdmin && (
+        {authData?.isAdmin && (
           <Button
             title={'DELETE'}
             onClick={handleDelete}

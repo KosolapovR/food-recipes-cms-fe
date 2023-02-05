@@ -11,6 +11,7 @@ import {
 } from './context/auth-token-context';
 import { API_TOKEN } from './const';
 import AppRouter from './AppRouter';
+import { me } from './api/auth';
 
 type LocationGenerics = MakeGenerics<{
   Params: { recipeId: string; userId: string };
@@ -19,7 +20,11 @@ type LocationGenerics = MakeGenerics<{
 const location = new ReactLocation<LocationGenerics>();
 const queryClient = new QueryClient();
 
+const production = process.env.NODE_ENV !== 'production';
+
 const App = () => {
+  // eslint-disable-next-line
+  const [_, forceRerender] = useState({});
   const [token, insertToken] = useState<string | null>(
     localStorage.getItem(API_TOKEN) !== 'null'
       ? localStorage.getItem(API_TOKEN)
@@ -29,6 +34,22 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem(API_TOKEN, token);
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    const queryKey = ['auth'];
+    async function getMe() {
+      try {
+        const user = await queryClient.fetchQuery({
+          queryKey,
+          queryFn: me,
+        });
+        queryClient.setQueryData(queryKey, () => user);
+        forceRerender({});
+      } catch (error) {
+        queryClient.resetQueries({ queryKey, exact: true });
+      }
+    }
+    const authData = queryClient.getQueryData(queryKey);
+    if (token && !authData) getMe();
   }, [token]);
 
   axios.interceptors.response.use(
@@ -71,7 +92,7 @@ const App = () => {
           pauseOnHover
           theme="light"
         />
-        <ReactQueryDevtools initialIsOpen={false} />
+        {!production && <ReactQueryDevtools initialIsOpen={false} />}
       </AuthTokenContext.Provider>
     </QueryClientProvider>
   );

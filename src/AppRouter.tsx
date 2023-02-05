@@ -18,7 +18,7 @@ export interface IRouterProps {
 }
 const AppRouter = ({ token, location }: IRouterProps) => {
   const queryClient = useQueryClient();
-  const { isAdmin } = useAuth();
+  const authData = useAuth();
 
   const publicRoutes: Route<DefaultGenerics>[] = [
     {
@@ -43,7 +43,6 @@ const AppRouter = ({ token, location }: IRouterProps) => {
       ],
     },
   ];
-
   const privateRoutes: Route<DefaultGenerics>[] = [
     {
       path: 'users',
@@ -62,17 +61,14 @@ const AppRouter = ({ token, location }: IRouterProps) => {
       ],
     },
   ];
-
   const notFoundRoute: Route<DefaultGenerics> = {
     path: '*',
     element: <>404</>,
   };
-
   const nonAuthorizedRoutes: Route<DefaultGenerics>[] = [
     ...publicRoutes,
     notFoundRoute,
   ];
-
   const authorizedRoutes: Route<DefaultGenerics>[] = [
     ...publicRoutes,
     ...privateRoutes,
@@ -83,7 +79,7 @@ const AppRouter = ({ token, location }: IRouterProps) => {
     <Router
       location={location}
       basepath={'cms'}
-      routes={isAdmin ? authorizedRoutes : nonAuthorizedRoutes}
+      routes={authData?.isAdmin ? authorizedRoutes : nonAuthorizedRoutes}
     >
       <Layout>
         <Outlet />

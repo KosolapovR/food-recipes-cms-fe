@@ -20,12 +20,9 @@ const Login = () => {
   const { setToken } = useContext(AuthTokenContext);
   const queryClient = useQueryClient();
   const mutation = useMutation(auth, {
-    onSuccess: (data) => {
-      queryClient.setQueryData(['auth'], () => ({
-        email: data.email,
-        isAdmin: data.isAdmin,
-      }));
-      setToken(data.token);
+    onSuccess: (user) => {
+      queryClient.setQueryData(['auth'], () => user);
+      setToken(user.token);
     },
   });
   const { handleChange, handleSubmit, values, getFieldMeta } = useFormik({

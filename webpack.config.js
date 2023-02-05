@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 let mode = 'development';
 let target = 'web';
 if (process.env.NODE_ENV === 'production') {
-  mope = 'production';
+  mode = 'production';
   target = 'browserslist';
 }
 

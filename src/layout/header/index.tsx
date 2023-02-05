@@ -10,11 +10,11 @@ function Header() {
     setToken(null);
   }, [setToken]);
 
-  const { email } = useAuth();
+  const authData = useAuth();
 
   return (
     <header className="fixed z-20 top-0 left-0 right-0 px-6 bg-white h-16 gap-4 shadow-md flex items-center justify-end">
-      <span className="text-sm font-semibold">{email}</span>
+      <span className="text-sm font-semibold">{authData?.email}</span>
       <MoreIcon fill={'#999999'} onClick={logout} />
     </header>
   );

@@ -18,7 +18,7 @@ import { useAuth } from '../../query-hooks';
 
 function Navbar() {
   const loadRoute = useLoadRoute();
-  const { isAdmin } = useAuth();
+  const authData = useAuth();
 
   const blocks: INavbarBlock[] = [
     {
@@ -50,7 +50,7 @@ function Navbar() {
     },
     {
       title: 'SETTINGS',
-      hidden: !isAdmin,
+      hidden: !authData?.isAdmin,
       items: [
         {
           value: 'users',

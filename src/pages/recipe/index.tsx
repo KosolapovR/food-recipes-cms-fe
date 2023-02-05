@@ -44,7 +44,7 @@ const RecipePage = ({ id }: IdRouteParams) => {
     navigation({ to: '/recipes', replace: true });
   }
   const queryClient = useQueryClient();
-  const { isAdmin } = useAuth();
+  const authData = useAuth();
 
   const {
     generateCreateMutation,
@@ -102,19 +102,19 @@ const RecipePage = ({ id }: IdRouteParams) => {
       label: 'Activate',
       name: 'activate',
       action: handleActivate,
-      hidden: !id || data.status === 'active' || !isAdmin,
+      hidden: !id || data.status === 'active' || !authData?.isAdmin,
     },
     {
       label: 'Deactivate',
       name: 'deactivate',
       action: handleDeactivate,
-      hidden: !id || data.status === 'inactive' || !isAdmin,
+      hidden: !id || data.status === 'inactive' || !authData?.isAdmin,
     },
     {
       label: 'Delete',
       name: 'delete',
       action: handleDelete,
-      hidden: !id || !isAdmin,
+      hidden: !id || !authData?.isAdmin,
     },
   ];
 
