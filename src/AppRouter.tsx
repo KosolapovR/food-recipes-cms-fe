@@ -1,92 +1,51 @@
-import React from 'react';
-import Layout from './layout/Layout';
-import {
-  DefaultGenerics,
-  Outlet,
-  ReactLocation,
-  Route,
-  Router,
-} from '@tanstack/react-location';
-import { Dashboard, Login, Recipe, Recipes, User, Users } from './pages';
-import { fetchRecipes, fetchUsers } from './api';
-import { useQueryClient } from '@tanstack/react-query';
-import { useAuth } from './query-hooks';
+import React, { useContext } from 'react';
+import axios, { AxiosError } from 'axios';
+import { ReactLocation } from '@tanstack/react-location';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import { auth } from './api';
+import { AuthTokenContext } from './context/auth-token-context';
+import { Login } from './pages';
+import AuthorizedRoutes from './AuthorizedRoutes';
 
 export interface IRouterProps {
-  token?: string;
   location: ReactLocation;
 }
-const AppRouter = ({ token, location }: IRouterProps) => {
+const AppRouter = (props: IRouterProps) => {
   const queryClient = useQueryClient();
-  const authData = useAuth();
+  const { setToken, getToken } = useContext(AuthTokenContext);
 
-  const publicRoutes: Route<DefaultGenerics>[] = [
-    {
-      path: '/',
-      element: <Dashboard />,
+  axios.defaults.headers.common['Authorization'] = `Bearer ${getToken()}`;
+  axios.interceptors.response.use(
+    function (response) {
+      // Any status code that lie within the range of 2xx cause this function to trigger
+      // Do something with response data
+      return response;
     },
-    {
-      path: 'recipes',
-      children: [
-        {
-          path: '/',
-          element: <Recipes />,
-          loader: () =>
-            queryClient.getQueryData(['recipes']) ??
-            queryClient.fetchQuery(['recipes'], fetchRecipes),
-        },
-        { path: 'new', element: <Recipe /> },
-        {
-          path: ':recipeId',
-          element: async ({ params }) => <Recipe id={params.recipeId} />,
-        },
-      ],
-    },
-  ];
-  const privateRoutes: Route<DefaultGenerics>[] = [
-    {
-      path: 'users',
-      children: [
-        {
-          path: '/',
-          element: <Users />,
-          loader: () =>
-            queryClient.getQueryData(['users']) ??
-            queryClient.fetchQuery(['users'], fetchUsers),
-        },
-        {
-          path: ':userId',
-          element: async ({ params }) => <User id={params.userId} />,
-        },
-      ],
-    },
-  ];
-  const notFoundRoute: Route<DefaultGenerics> = {
-    path: '*',
-    element: <>404</>,
-  };
-  const nonAuthorizedRoutes: Route<DefaultGenerics>[] = [
-    ...publicRoutes,
-    notFoundRoute,
-  ];
-  const authorizedRoutes: Route<DefaultGenerics>[] = [
-    ...publicRoutes,
-    ...privateRoutes,
-    notFoundRoute,
-  ];
+    function (error: AxiosError) {
+      // Any status codes that falls outside the range of 2xx cause this function to trigger
+      // Do something with response error
+      if (error.response.status === 401) {
+        queryClient.clear();
+      }
+      return Promise.reject(error);
+    }
+  );
 
-  return token ? (
-    <Router
-      location={location}
-      basepath={'cms'}
-      routes={authData?.isAdmin ? authorizedRoutes : nonAuthorizedRoutes}
-    >
-      <Layout>
-        <Outlet />
-      </Layout>
-    </Router>
+  const mutation = useMutation({
+    mutationKey: ['auth'],
+    mutationFn: auth,
+    onSuccess: (data) =>
+      queryClient.setQueryData(['auth'], () => {
+        setToken(data.token);
+        return data;
+      }),
+  });
+
+  return getToken() ? (
+    <AuthorizedRoutes location={props.location} />
   ) : (
-    <Login />
+    <Login onSubmit={mutation.mutate} isLoading={mutation.isLoading} />
   );
 };
 
