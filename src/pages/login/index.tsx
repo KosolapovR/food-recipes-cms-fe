@@ -1,11 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-
-import { auth } from '../../api';
-import { AuthTokenContext } from '../../context/auth-token-context';
-import { TextField, Button } from '../../components';
+import { Button, TextField } from '../../components';
+import { IUserCreateDTO } from '../../interfaces';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -16,21 +13,15 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().min(4, 'Min length 4').required('Required'),
 });
 
-const Login = () => {
-  const { setToken } = useContext(AuthTokenContext);
-  const queryClient = useQueryClient();
-  const mutation = useMutation(auth, {
-    onSuccess: (user) => {
-      queryClient.setQueryData(['auth'], () => user);
-      setToken(user.token);
-    },
-  });
+export interface ILoginProps {
+  onSubmit: (user: IUserCreateDTO) => void;
+  isLoading?: boolean;
+}
+const Login = ({ onSubmit, isLoading }: ILoginProps) => {
   const { handleChange, handleSubmit, values, getFieldMeta } = useFormik({
     initialValues: { email: '', password: '' },
     validationSchema,
-    onSubmit: (values) => {
-      mutation.mutate(values);
-    },
+    onSubmit,
   });
 
   return (
@@ -59,7 +50,7 @@ const Login = () => {
             type={'button'}
             title={'Submit'}
             onClick={() => handleSubmit()}
-            isLoading={mutation.isLoading}
+            isLoading={isLoading}
             className="w-full mt-4"
           />
         </form>

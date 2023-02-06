@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+
 import App from './App';
 import './index.css';
 
@@ -14,14 +15,20 @@ const queryClient = new QueryClient({
   },
 });
 
-const persister = createSyncStoragePersister({
+const localStoragePersister = createSyncStoragePersister({
   storage: window.localStorage,
 });
 
 ReactDOM.render(
   <PersistQueryClientProvider
     client={queryClient}
-    persistOptions={{ persister }}
+    persistOptions={{
+      persister: localStoragePersister,
+      dehydrateOptions: {
+        dehydrateQueries: true,
+        dehydrateMutations: false,
+      },
+    }}
   >
     <App />
   </PersistQueryClientProvider>,
