@@ -19,7 +19,6 @@ import { useAuth } from '../../query-hooks';
 function Navbar() {
   const loadRoute = useLoadRoute();
   const authData = useAuth();
-
   const blocks: INavbarBlock[] = [
     {
       title: 'DASHBOARD',

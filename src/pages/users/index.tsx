@@ -28,7 +28,7 @@ const Users = () => {
       <div className="flex space-between items-center gap-4 h-6 text-neutral-600 mb-4">
         <div className="text-xl">Users</div>
         <div className="w-px h-full bg-neutral-400" />
-        <div className="text-xl grow">{data.length}</div>
+        <div className="text-xl grow">{data?.length}</div>
       </div>
       <Tabs
         options={[
@@ -42,8 +42,8 @@ const Users = () => {
       />
       <div ref={parent} className="max-w-screen-xl">
         <div className="relative overflow-x-auto">
-          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <table className="w-full text-sm text-left text-gray-500">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   Email
@@ -60,17 +60,17 @@ const Users = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((u) => (
+              {data?.map((u) => (
                 <tr
                   key={u.id}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700  hover:bg-gray-100 cursor-pointer"
+                  className="bg-white border-b hover:bg-gray-100 cursor-pointer"
                   onClick={() => {
                     handleView(u.id);
                   }}
                 >
                   <th
                     scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                   >
                     {u.email}
                   </th>
