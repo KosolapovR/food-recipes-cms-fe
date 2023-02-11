@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
 import axios, { AxiosError } from 'axios';
 import { ReactLocation } from '@tanstack/react-location';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
-import { auth } from './api';
 import { AuthTokenContext } from './context/auth-token-context';
 import { Login } from './pages';
 import AuthorizedRoutes from './AuthorizedRoutes';
@@ -13,7 +12,7 @@ export interface IRouterProps {
 }
 const AppRouter = (props: IRouterProps) => {
   const queryClient = useQueryClient();
-  const { setToken, getToken } = useContext(AuthTokenContext);
+  const { getToken } = useContext(AuthTokenContext);
 
   axios.defaults.headers.common['Authorization'] = `Bearer ${getToken()}`;
   axios.interceptors.response.use(
@@ -32,20 +31,10 @@ const AppRouter = (props: IRouterProps) => {
     }
   );
 
-  const mutation = useMutation({
-    mutationKey: ['auth'],
-    mutationFn: auth,
-    onSuccess: (data) =>
-      queryClient.setQueryData(['auth'], () => {
-        setToken(data.token);
-        return data;
-      }),
-  });
-
   return getToken() ? (
     <AuthorizedRoutes location={props.location} />
   ) : (
-    <Login onSubmit={mutation.mutate} isLoading={mutation.isLoading} />
+    <Login />
   );
 };
 
