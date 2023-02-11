@@ -1,13 +1,17 @@
 import React, { useCallback, useContext } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 import MoreIcon from '../../components/icons/more.svg';
 import { AuthTokenContext } from '../../context/auth-token-context';
 import { useAuth } from '../../query-hooks';
 
 function Header() {
+  const queryClient = useQueryClient();
   const { setToken } = useContext(AuthTokenContext);
+
   const logout = useCallback(() => {
     setToken(null);
+    queryClient.clear();
   }, [setToken]);
 
   const authData = useAuth();

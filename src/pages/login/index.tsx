@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import { auth } from '../../api';
 import { Button, TextField } from '../../components';
-import { IUserCreateDTO } from '../../interfaces';
+import { AuthTokenContext } from '../../context/auth-token-context';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -13,15 +16,19 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().min(4, 'Min length 4').required('Required'),
 });
 
-export interface ILoginProps {
-  onSubmit: (user: IUserCreateDTO) => void;
-  isLoading?: boolean;
-}
-const Login = ({ onSubmit, isLoading }: ILoginProps) => {
+const Login = () => {
+  const { setToken } = useContext(AuthTokenContext);
+  const queryClient = useQueryClient();
+  const { mutateAsync, isLoading } = useMutation(auth);
+
   const { handleChange, handleSubmit, values, getFieldMeta } = useFormik({
     initialValues: { email: '', password: '' },
     validationSchema,
-    onSubmit,
+    onSubmit: async (data) => {
+      const res = await mutateAsync(data);
+      setToken(res?.token);
+      queryClient.setQueryData(['auth'], () => res);
+    },
   });
 
   return (
