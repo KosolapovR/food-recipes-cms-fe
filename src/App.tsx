@@ -26,7 +26,10 @@ const App = () => {
   const authContextValue = useMemo<IAuthTokenContext>(
     () => ({
       getToken: () => token,
-      setToken: insertToken,
+      setToken: (t) => {
+        insertToken(t);
+        localStorage.setItem(API_TOKEN, t);
+      },
     }),
     [token]
   );

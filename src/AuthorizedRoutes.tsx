@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DefaultGenerics,
   Outlet,
@@ -17,6 +17,7 @@ export interface IAuthorizedRoutesProps {
   location: ReactLocation;
 }
 const AuthorizedRoutes = (props: IAuthorizedRoutesProps) => {
+  const [key, setKey] = useState('');
   const queryClient = useQueryClient();
   const authData = useAuth();
 
@@ -75,9 +76,14 @@ const AuthorizedRoutes = (props: IAuthorizedRoutesProps) => {
     notFoundRoute,
   ];
 
+  useEffect(() => {
+    setTimeout(setKey, 0, Date.now().toString());
+  }, []);
+
   return (
     <Router
       {...props}
+      key={key}
       basepath={'cms'}
       routes={authData?.isAdmin ? authorizedRoutes : nonAuthorizedRoutes}
     >

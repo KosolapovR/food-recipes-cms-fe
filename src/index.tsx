@@ -10,7 +10,7 @@ import './index.css';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      cacheTime: 1000 * 60 * 60 * 24, // 24 hours
+      cacheTime: 1000 * 60 * 15, // 15 min
     },
   },
 });
@@ -24,6 +24,7 @@ ReactDOM.render(
     client={queryClient}
     persistOptions={{
       persister: localStoragePersister,
+      maxAge: 1000 * 60 * 15, // 15 min
       dehydrateOptions: {
         dehydrateQueries: true,
         dehydrateMutations: false,
