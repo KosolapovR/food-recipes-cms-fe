@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import {
-  DefaultGenerics,
+  MakeGenerics,
   Outlet,
   ReactLocation,
   Route,
@@ -8,20 +8,24 @@ import {
 } from '@tanstack/react-location';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { fetchRecipes, fetchUsers } from './api';
+import { fetchAll as fetchAllRecipes } from './api/recipe';
+import { fetchAll as fetchAllUsers } from './api/user';
+import { AuthTokenContext } from './context/auth-token-context';
 import Layout from './layout/Layout';
-import { Dashboard, Recipe, Recipes, User, Users } from './pages';
+import { Dashboard, Login, Recipe, Recipes, User, Users } from './pages';
 import { useAuth } from './query-hooks';
 
-export interface IAuthorizedRoutesProps {
-  location: ReactLocation;
-}
-const AuthorizedRoutes = (props: IAuthorizedRoutesProps) => {
-  const [key, setKey] = useState('');
+type LocationGenerics = MakeGenerics<{
+  Params: { recipeId: string; userId: string };
+}>;
+const location = new ReactLocation<LocationGenerics>();
+
+const Routes = () => {
+  const { token } = useContext(AuthTokenContext);
   const queryClient = useQueryClient();
   const authData = useAuth();
 
-  const publicRoutes: Route<DefaultGenerics>[] = [
+  const publicRoutes: Route<LocationGenerics>[] = [
     {
       path: '/',
       element: <Dashboard />,
@@ -34,7 +38,7 @@ const AuthorizedRoutes = (props: IAuthorizedRoutesProps) => {
           element: <Recipes />,
           loader: () =>
             queryClient.getQueryData(['recipes']) ??
-            queryClient.fetchQuery(['recipes'], fetchRecipes),
+            queryClient.fetchQuery(['recipes'], fetchAllRecipes),
         },
         { path: 'new', element: <Recipe /> },
         {
@@ -44,7 +48,7 @@ const AuthorizedRoutes = (props: IAuthorizedRoutesProps) => {
       ],
     },
   ];
-  const privateRoutes: Route<DefaultGenerics>[] = [
+  const privateRoutes: Route<LocationGenerics>[] = [
     {
       path: 'users',
       children: [
@@ -53,7 +57,7 @@ const AuthorizedRoutes = (props: IAuthorizedRoutesProps) => {
           element: <Users />,
           loader: () =>
             queryClient.getQueryData(['users']) ??
-            queryClient.fetchQuery(['users'], fetchUsers),
+            queryClient.fetchQuery(['users'], fetchAllUsers),
         },
         {
           path: ':userId',
@@ -62,36 +66,35 @@ const AuthorizedRoutes = (props: IAuthorizedRoutesProps) => {
       ],
     },
   ];
-  const notFoundRoute: Route<DefaultGenerics> = {
+  const notFoundRoute: Route<LocationGenerics> = {
     path: '*',
     element: <>404</>,
   };
-  const nonAuthorizedRoutes: Route<DefaultGenerics>[] = [
+  const nonAuthorizedRoutes: Route<LocationGenerics>[] = [
     ...publicRoutes,
     notFoundRoute,
   ];
-  const authorizedRoutes: Route<DefaultGenerics>[] = [
+  const authorizedRoutes: Route<LocationGenerics>[] = [
     ...publicRoutes,
     ...privateRoutes,
     notFoundRoute,
   ];
 
-  useEffect(() => {
-    setTimeout(setKey, 0, Date.now().toString());
-  }, []);
-
   return (
     <Router
-      {...props}
-      key={key}
+      location={location}
       basepath={'cms'}
       routes={authData?.isAdmin ? authorizedRoutes : nonAuthorizedRoutes}
     >
-      <Layout>
-        <Outlet />
-      </Layout>
+      {token ? (
+        <Layout>
+          <Outlet />
+        </Layout>
+      ) : (
+        <Login />
+      )}
     </Router>
   );
 };
 
-export default AuthorizedRoutes;
+export default Routes;

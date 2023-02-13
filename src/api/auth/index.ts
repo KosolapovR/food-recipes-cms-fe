@@ -1,11 +1,19 @@
-import axios from 'axios';
-import { baseUrl } from '../const';
-import { IUserSingleDTO } from '../../interfaces';
+import axios from '../axios-instance';
+import { IUserSingleDTO, ApiResponse } from '../../interfaces';
 
-export async function auth(body: {
-  email: string;
-  password: string;
-}): Promise<IUserSingleDTO | undefined> {
-  const { data } = await axios.post(`${baseUrl}/auth`, body);
+const servicePath = '/auth';
+
+export async function auth(body: { email: string; password: string }) {
+  const { data } = await axios.post<ApiResponse<IUserSingleDTO>>(
+    servicePath,
+    body
+  );
+  return data.data;
+}
+
+export async function getMe() {
+  const { data } = await axios.get<ApiResponse<IUserSingleDTO>>(
+    `${servicePath}/me`
+  );
   return data.data;
 }

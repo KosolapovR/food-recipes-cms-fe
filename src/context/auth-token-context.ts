@@ -1,10 +1,9 @@
 import React from 'react';
 
 export interface IAuthTokenContext {
-  getToken: () => string | null;
+  token?: string;
   setToken: (t: string) => void;
 }
 export const AuthTokenContext = React.createContext<IAuthTokenContext>({
-  getToken: () => null,
-  setToken: (s) => {},
+  setToken: () => undefined,
 });

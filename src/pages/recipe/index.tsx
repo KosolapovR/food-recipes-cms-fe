@@ -5,12 +5,12 @@ import { useNavigate } from '@tanstack/react-location';
 
 import { RecipeForm } from '../../components/forms';
 import {
-  activateRecipe,
-  createRecipe,
-  deactivateRecipe,
-  fetchRecipeById,
-  removeRecipeById,
-  updateRecipe,
+  activate,
+  create,
+  deactivate,
+  fetchById,
+  removeById,
+  update,
 } from '../../api/recipe';
 import {
   CommonSingleActionBodyType,
@@ -26,7 +26,7 @@ import { useAuth } from '../../query-hooks';
 const RecipePage = ({ id }: IdRouteParams) => {
   const navigation = useNavigate();
 
-  const { data, error } = useQuery(['recipes', { id }], fetchRecipeById, {
+  const { data, error } = useQuery(['recipes', { id }], fetchById, {
     initialData: {
       id: undefined,
       title: undefined,
@@ -57,22 +57,22 @@ const RecipePage = ({ id }: IdRouteParams) => {
     entityName: 'recipe',
   });
   const createMutation = generateCreateMutation<IRecipeCreateDTO>({
-    mainFunc: createRecipe,
+    mainFunc: create,
   });
   const updateMutation = generateUpdateMutation<IRecipeUpdateDTO>({
-    mainFunc: updateRecipe,
+    mainFunc: update,
   });
   const activateMutation = generateActivateMutation<CommonSingleActionBodyType>(
     {
-      mainFunc: activateRecipe,
+      mainFunc: activate,
     }
   );
   const deactivateMutation =
     generateDeactivateMutation<CommonSingleActionBodyType>({
-      mainFunc: deactivateRecipe,
+      mainFunc: deactivate,
     });
   const removeMutation = generateRemoveMutation<CommonSingleActionBodyType>({
-    mainFunc: removeRecipeById,
+    mainFunc: removeById,
   });
 
   const handleSubmit = useCallback(

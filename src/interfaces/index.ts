@@ -23,6 +23,7 @@ import {
   ActivationUnionStatusType,
   CommonUpdateDTOType,
   IdRouteParams,
+  ApiResponse,
 } from './common';
 
 type BaseFuncType<TData, TVariables> = (v: TVariables) => Promise<TData>;
@@ -47,4 +48,5 @@ export {
   ActivationUnionStatusType,
   CommonUpdateDTOType,
   IdRouteParams,
+  ApiResponse,
 };
