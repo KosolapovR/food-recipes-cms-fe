@@ -46,6 +46,8 @@ const App = () => {
       // Do something with response error
       if (error.response.status === 401) {
         window.location.href = '/login';
+        insertToken(null);
+        localStorage.setItem(API_TOKEN, null);
         queryClient.clear();
       }
       return Promise.reject(error);
