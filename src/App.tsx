@@ -10,7 +10,7 @@ import {
   AuthTokenContext,
   IAuthTokenContext,
 } from './context/auth-token-context';
-import { API_TOKEN } from './const';
+import { API_TOKEN, BASE_PATH } from './const';
 import Routes from './Routes';
 import { getMe } from './api/auth';
 
@@ -45,7 +45,7 @@ const App = () => {
       // Any status codes that falls outside the range of 2xx cause this function to trigger
       // Do something with response error
       if (error.response.status === 401) {
-        window.location.href = '/login';
+        window.location.href = `${BASE_PATH}/login`;
         queryClient.clear();
       }
       return Promise.reject(error);
@@ -53,7 +53,9 @@ const App = () => {
   );
 
   const { isFetching } = useQuery(['auth'], getMe, { enabled: !!token });
+
   if (isFetching) return <div className="text-sm p-2">Loading...</div>;
+
   return (
     <AuthTokenContext.Provider value={authContextValue}>
       <Routes />

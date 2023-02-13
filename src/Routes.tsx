@@ -14,6 +14,7 @@ import { AuthTokenContext } from './context/auth-token-context';
 import Layout from './layout/Layout';
 import { Dashboard, Login, Recipe, Recipes, User, Users } from './pages';
 import { useAuth } from './query-hooks';
+import { BASE_PATH } from './const';
 
 type LocationGenerics = MakeGenerics<{
   Params: { recipeId: string; userId: string };
@@ -83,7 +84,7 @@ const Routes = () => {
   return (
     <Router
       location={location}
-      basepath={'cms'}
+      basepath={BASE_PATH}
       routes={authData?.isAdmin ? authorizedRoutes : nonAuthorizedRoutes}
     >
       {token ? (
