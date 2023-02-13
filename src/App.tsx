@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { MakeGenerics, ReactLocation } from '@tanstack/react-location';
+import { AxiosError } from 'axios';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,7 +10,7 @@ import {
   AuthTokenContext,
   IAuthTokenContext,
 } from './context/auth-token-context';
-import { API_TOKEN, BASE_PATH } from './const';
+import { API_TOKEN } from './const';
 import Routes from './Routes';
 import { getMe } from './api/auth';
 
@@ -44,7 +45,7 @@ const App = () => {
       // Any status codes that falls outside the range of 2xx cause this function to trigger
       // Do something with response error
       if (error.response.status === 401) {
-        window.location.href = `${BASE_PATH}/login`;
+        window.location.href = '/login';
         queryClient.clear();
       }
       return Promise.reject(error);
@@ -52,9 +53,7 @@ const App = () => {
   );
 
   const { isFetching } = useQuery(['auth'], getMe, { enabled: !!token });
-
   if (isFetching) return <div className="text-sm p-2">Loading...</div>;
-
   return (
     <AuthTokenContext.Provider value={authContextValue}>
       <Routes />
