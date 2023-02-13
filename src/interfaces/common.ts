@@ -15,3 +15,5 @@ export type ActivationUnionStatusType = 'active' | 'inactive';
 export interface IdRouteParams {
   id?: string;
 }
+
+export type ApiResponse<T> = { data: T };

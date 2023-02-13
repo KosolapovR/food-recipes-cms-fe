@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-location';
 
 import { UserForm } from '../../components/forms';
-import { fetchUserById } from '../../api';
+import { fetchById } from '../../api/user';
 import {
   CommonSingleActionBodyType,
   IdRouteParams,
@@ -12,17 +12,12 @@ import {
   IUserUpdateDTO,
 } from '../../interfaces';
 import { getCommonMutationGenerator } from '../../common-mutations';
-import {
-  activateUser,
-  deactivateUser,
-  removeUserById,
-  updateUser,
-} from '../../api/user';
+import { activate, deactivate, removeById, update } from '../../api/user';
 import { IActionInfo } from '../../components/action-buttons';
 
 const UserPage = ({ id }: IdRouteParams) => {
   const navigation = useNavigate();
-  const { data, error } = useQuery(['users', { id }], fetchUserById, {
+  const { data, error } = useQuery(['users', { id }], fetchById, {
     initialData: {
       id: undefined,
       isAdmin: undefined,
@@ -50,19 +45,19 @@ const UserPage = ({ id }: IdRouteParams) => {
   });
 
   const updateMutation = generateUpdateMutation<IUserUpdateDTO>({
-    mainFunc: updateUser,
+    mainFunc: update,
   });
   const activateMutation = generateActivateMutation<CommonSingleActionBodyType>(
     {
-      mainFunc: activateUser,
+      mainFunc: activate,
     }
   );
   const deactivateMutation =
     generateDeactivateMutation<CommonSingleActionBodyType>({
-      mainFunc: deactivateUser,
+      mainFunc: deactivate,
     });
   const removeMutation = generateRemoveMutation<CommonSingleActionBodyType>({
-    mainFunc: removeUserById,
+    mainFunc: removeById,
   });
 
   const handleSubmit = updateMutation.mutate;

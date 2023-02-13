@@ -3,7 +3,7 @@ import { useNavigate } from '@tanstack/react-location';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
-import { removeRecipeById } from '../../api/recipe';
+import { removeById } from '../../api/recipe';
 import { IRecipeGroupDTO } from '../../interfaces';
 import { useAuth } from '../../query-hooks';
 import CommentIcon from '../icons/comment.svg';
@@ -36,7 +36,7 @@ const RecipeCard = ({
   };
   const onErrorDelete = () => toast.error('Something went wrong...');
 
-  const mutation = useMutation(removeRecipeById, {
+  const mutation = useMutation(removeById, {
     onSuccess: onSuccessDelete,
     onError: onErrorDelete,
   });

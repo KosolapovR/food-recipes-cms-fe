@@ -2,8 +2,9 @@ import React, { useContext } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-location';
 
-import { auth } from '../../api';
+import { auth } from '../../api/auth';
 import { Button, TextField } from '../../components';
 import { AuthTokenContext } from '../../context/auth-token-context';
 
@@ -19,6 +20,8 @@ const validationSchema = Yup.object().shape({
 const Login = () => {
   const { setToken } = useContext(AuthTokenContext);
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
   const { mutateAsync, isLoading } = useMutation(auth);
 
   const { handleChange, handleSubmit, values, getFieldMeta } = useFormik({
@@ -26,8 +29,10 @@ const Login = () => {
     validationSchema,
     onSubmit: async (data) => {
       const res = await mutateAsync(data);
-      setToken(res?.token);
+      const token = res?.token;
+      setToken(token);
       queryClient.setQueryData(['auth'], () => res);
+      if (token) navigate({ to: '/recipes', replace: true });
     },
   });
 

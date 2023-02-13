@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { fetchAll } from '../api/user';
 import { IUserGroupDTO, ActivationUnionStatusType } from '../interfaces';
-import { fetchUsers } from '../api';
 
 export const useUsers = ({
   status,
@@ -12,7 +12,7 @@ export const useUsers = ({
   const queryKey = status ? ['users', status] : ['users'];
   return useQuery<IUserGroupDTO[]>({
     queryKey,
-    queryFn: fetchUsers,
+    queryFn: fetchAll,
     initialData: () =>
       queryClient.getQueryData<IUserGroupDTO[]>(queryKey) || [],
   });
