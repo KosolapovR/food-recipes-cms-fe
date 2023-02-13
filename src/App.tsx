@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { AxiosError } from 'axios';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { MakeGenerics, ReactLocation } from '@tanstack/react-location';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
