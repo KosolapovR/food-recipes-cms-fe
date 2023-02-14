@@ -1,6 +1,6 @@
 {
   "name": "cms-fe",
-  "version": "1.2.9",
+  "version": "1.3.0-dev",
   "description": "Admin panel for cms",
   "main": "src/index.tsx",
   "scripts": {
