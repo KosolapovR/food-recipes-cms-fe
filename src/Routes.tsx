@@ -10,6 +10,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { fetchAll as fetchAllRecipes } from './api/recipe';
 import { fetchAll as fetchAllUsers } from './api/user';
+import { BASE_PATH } from './const';
 import { AuthTokenContext } from './context/auth-token-context';
 import Layout from './layout/Layout';
 import { Dashboard, Login, Recipe, Recipes, User, Users } from './pages';
@@ -83,7 +84,7 @@ const Routes = () => {
   return (
     <Router
       location={location}
-      basepath={'cms'}
+      basepath={BASE_PATH}
       routes={authData?.isAdmin ? authorizedRoutes : nonAuthorizedRoutes}
     >
       {token ? (
