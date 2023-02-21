@@ -17,6 +17,7 @@ import {
   ICommentUpdateDTO,
   ICommentGroupDTO,
 } from './IComment';
+import { IFileStorageResponse } from './IFileStorage';
 import {
   CommonGroupActionBodyType,
   CommonSingleActionBodyType,
@@ -42,6 +43,7 @@ export {
   ICommentSingleDTO,
   ICommentUpdateDTO,
   ICommentGroupDTO,
+  IFileStorageResponse,
   BaseFuncType,
   CommonGroupActionBodyType,
   CommonSingleActionBodyType,

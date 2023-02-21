@@ -4,11 +4,14 @@ import * as Yup from 'yup';
 import { usePrompt } from '@tanstack/react-location';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 
-import { TextAreaField, TextField } from '../../index';
+import { FileDropZone, TextAreaField, TextField } from '../../index';
 import FieldsBlock from '../../fields-block';
 import { IActionInfo } from '../../action-buttons';
 import FormHeader from '../../form-header';
 import { IRecipeSingleDTO, IRecipeUpdateDTO } from '../../../interfaces';
+import Image from '../../image';
+import { upload } from '../../../api/file-storage';
+import { BASE_URL } from '../../../api/const';
 
 const RecipeStepSchema = Yup.object().shape({
   title: Yup.string().min(2, 'Min length 2').max(255, 'Max length 255'),
@@ -31,12 +34,12 @@ export interface IRecipeFormProps {
 }
 
 const RecipeForm = ({ onSubmit, actions, data }: IRecipeFormProps) => {
-  const { id, steps, status, previewImagePath, title, categoryId } = data;
+  const { id, status, previewImagePath, title } = data;
   const formik = useFormik({
-    initialValues: { id, title, categoryId, steps, status, previewImagePath },
+    initialValues: data,
     validationSchema,
     onSubmit: (params) => {
-      onSubmit(params);
+      onSubmit({ ...params, previewImagePath: previewImagePath || imageSrc });
     },
   });
   const {
@@ -52,7 +55,7 @@ const RecipeForm = ({ onSubmit, actions, data }: IRecipeFormProps) => {
   const [parent] = useAutoAnimate<HTMLDivElement>({});
 
   const [openedFieldBlocks, setOpenedFieldBLocks] = useState<number[]>([]);
-
+  const [imageSrc, setImageSrc] = useState<string>();
   const toggleFieldBlock = useCallback(
     (index) => {
       if (
@@ -68,13 +71,29 @@ const RecipeForm = ({ onSubmit, actions, data }: IRecipeFormProps) => {
 
   useEffect(() => {
     resetForm({
-      values: { id, title, steps, status, previewImagePath, categoryId },
+      values: data,
     });
   }, [id]);
 
   usePrompt(
     'There are unsaved changes, are you sure you want to leave?',
     dirty && !isSubmitting
+  );
+
+  const handleClearImageBuffer = useCallback(() => {
+    setImageSrc(undefined);
+  }, []);
+
+  const handleChangeFiles = useCallback(
+    async (files: File[]) => {
+      const formData = new FormData();
+      formData.append('image', files[0]);
+      const res = await upload(formData);
+      if (res.imagePath) {
+        setImageSrc(`${BASE_URL}/${res.imagePath}`);
+      }
+    },
+    [upload]
   );
 
   return (
@@ -100,6 +119,20 @@ const RecipeForm = ({ onSubmit, actions, data }: IRecipeFormProps) => {
             value={values.title}
             meta={getFieldMeta('title')}
           />
+          {previewImagePath || imageSrc ? (
+            <Image
+              src={previewImagePath || imageSrc}
+              style={{ width: '100%', height: 'auto' }}
+              onDelete={handleClearImageBuffer}
+            />
+          ) : (
+            <FileDropZone
+              onChangeFiles={handleChangeFiles}
+              multiple={false}
+              availableFormats={['png', 'jpeg']}
+            />
+          )}
+
           <TextField
             id="categoryId"
             title="CategoryId"
