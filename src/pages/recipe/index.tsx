@@ -26,18 +26,25 @@ import { useAuth } from '../../query-hooks';
 const RecipePage = ({ id }: IdRouteParams) => {
   const navigation = useNavigate();
 
-  const { data, error } = useQuery(['recipes', { id }], fetchById, {
-    initialData: {
-      id: undefined,
-      title: undefined,
-      steps: [],
-      comments: [],
-      categoryId: '',
-      status: 'inactive',
-      previewImagePath: undefined,
-    },
-    enabled: !!id,
-  });
+  const { data, error } = useQuery<IRecipeSingleDTO>(
+    ['recipes', { id }],
+    fetchById,
+    {
+      initialData: {
+        id: undefined,
+        title: undefined,
+        steps: [],
+        comments: [],
+        categoryId: '',
+        status: 'inactive',
+        previewImagePath: undefined,
+        isLiked: false,
+        commentCount: 0,
+        likeCount: 0,
+      },
+      enabled: !!id,
+    }
+  );
 
   if (error) {
     toast.error('Something went wrong...');

@@ -46,12 +46,7 @@ const Recipes = () => {
         className="max-w-screen-xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-3 xl:gap-5"
       >
         {data.map((recipe) => (
-          <RecipeCard
-            key={recipe.id}
-            {...recipe}
-            commentsCount={0}
-            viewCount={0}
-          />
+          <RecipeCard {...recipe} key={recipe.id} />
         ))}
       </div>
     </div>

@@ -7,22 +7,17 @@ import { removeById } from '../../api/recipe';
 import { IRecipeGroupDTO } from '../../interfaces';
 import { useAuth } from '../../query-hooks';
 import CommentIcon from '../icons/comment.svg';
-import EyeIcon from '../icons/eye.svg';
+import HeartIcon from '../icons/heart-fill.svg';
 import Button from '../button';
 import Status from '../status';
-
-export interface IRecipeCard extends IRecipeGroupDTO {
-  commentsCount: number;
-  viewCount: number;
-}
 
 const RecipeCard = ({
   id,
   title,
-  commentsCount,
+  commentCount,
   status,
-  viewCount,
-}: IRecipeCard) => {
+  likeCount,
+}: IRecipeGroupDTO) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const authData = useAuth();
@@ -64,13 +59,13 @@ const RecipeCard = ({
       </div>
       <div className="border-b border-neutral-200 px-6 py-3 flex justify-center gap-5 items-center">
         <div className="flex justify-end gap-2 items-center">
-          <EyeIcon fill="#999999" />
-          <span>{viewCount}</span>
+          <HeartIcon fill="#999999" />
+          <span>{likeCount}</span>
         </div>
         <div className="w-px h-full bg-neutral-200" />
         <div className="flex justify-start gap-2 items-center">
           <CommentIcon fill="#999999" />
-          <span>{commentsCount}</span>
+          <span>{commentCount}</span>
         </div>
       </div>
       <div className="flex justify-center gap-5 px-6 py-3">
