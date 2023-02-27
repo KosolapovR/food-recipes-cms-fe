@@ -4,14 +4,15 @@ import * as Yup from 'yup';
 import { usePrompt } from '@tanstack/react-location';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 
+import { upload } from '../../../api/file-storage';
+import { BASE_URL } from '../../../api/const';
+import { IRecipeSingleDTO, IRecipeUpdateDTO } from '../../../interfaces';
+import { compressImage } from '../../../utils';
 import { FileDropZone, TextAreaField, TextField } from '../../index';
 import FieldsBlock from '../../fields-block';
 import { IActionInfo } from '../../action-buttons';
 import FormHeader from '../../form-header';
-import { IRecipeSingleDTO, IRecipeUpdateDTO } from '../../../interfaces';
 import Image from '../../image';
-import { upload } from '../../../api/file-storage';
-import { BASE_URL } from '../../../api/const';
 
 const RecipeStepSchema = Yup.object().shape({
   title: Yup.string().min(2, 'Min length 2').max(255, 'Max length 255'),
@@ -86,14 +87,17 @@ const RecipeForm = ({ onSubmit, actions, data }: IRecipeFormProps) => {
 
   const handleChangeFiles = useCallback(
     async (files: File[]) => {
+      const compressedImage = await compressImage(files[0]);
+      const fileToUpload =
+        files[0].size > compressedImage.size ? compressedImage : files[0];
       const formData = new FormData();
-      formData.append('image', files[0]);
+      formData.append('image', fileToUpload);
       const res = await upload(formData);
       if (res.imagePath) {
         setImageSrc(`${BASE_URL}/${res.imagePath}`);
       }
     },
-    [upload]
+    [upload, compressImage]
   );
 
   return (

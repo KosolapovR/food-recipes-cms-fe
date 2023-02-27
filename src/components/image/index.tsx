@@ -8,33 +8,37 @@ export interface IImageProps
 
 const noop = (): undefined => undefined;
 
-const Image = ({ onDelete, alt = 'image', ...rest }: IImageProps) => {
-  const [hovered, setHover] = useState(false);
-  const handleMouseEnter = useCallback(() => {
-    setHover(true);
-  }, []);
-  const handleMouseLeave = useCallback(() => {
-    setHover(false);
-  }, []);
-  return (
-    <div
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      style={{ width: rest.width, height: rest.height }}
-      className="relative"
-    >
-      <img {...rest} alt={alt} />
+const Image = React.forwardRef<HTMLImageElement, IImageProps>(
+  ({ onDelete, alt = 'image', className, ...rest }, ref) => {
+    const [hovered, setHover] = useState(false);
+    const handleMouseEnter = useCallback(() => {
+      setHover(true);
+    }, []);
+    const handleMouseLeave = useCallback(() => {
+      setHover(false);
+    }, []);
+    return (
       <div
-        onClick={hovered ? onDelete : noop}
-        className={cn(
-          'rounded-full absolute top-1 right-1 p-1 flex items-center justify-center bg-gray-700 hover:bg-gray-500 cursor-pointer',
-          !hovered && 'opacity-0'
-        )}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        style={{ width: rest.width, height: rest.height }}
+        className={cn(className ? className : 'relative')}
       >
-        <TrashIcon fill={'#DDDDDD'} />
+        <img {...rest} ref={ref} alt={alt} />
+        <div
+          onClick={hovered ? onDelete : noop}
+          className={cn(
+            'rounded-full absolute top-1 right-1 p-1 flex items-center justify-center bg-gray-700 hover:bg-gray-500 cursor-pointer',
+            !hovered && 'opacity-0'
+          )}
+        >
+          <TrashIcon fill={'#DDDDDD'} />
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
+
+Image.displayName = 'Image';
 
 export default Image;
