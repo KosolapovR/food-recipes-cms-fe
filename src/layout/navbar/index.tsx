@@ -7,6 +7,7 @@ import React, {
 import MoleculeIcon from '../../components/icons/molecule.svg';
 import BookIcon from '../../components/icons/book.svg';
 import UsersIcon from '../../components/icons/users.svg';
+import CommentIcon from '../../components/icons/comment.svg';
 import {
   Link,
   MatchRoute,
@@ -24,6 +25,17 @@ function Navbar() {
       title: 'DASHBOARD',
       items: [
         {
+          value: '/',
+          title: 'Dashboard',
+          renderIcon: (selected, hovered) => (
+            <MoleculeIcon
+              fill={selected ? '#FFFFFF' : hovered ? '#CCCCCC' : '#999999'}
+            />
+          ),
+          selected: false,
+          onMouseEnter: () => loadRoute({ to: 'dashboard' }),
+        },
+        {
           value: 'recipes',
           title: 'Recipes',
           renderIcon: (selected, hovered) => (
@@ -35,15 +47,15 @@ function Navbar() {
           onMouseEnter: () => loadRoute({ to: 'recipes' }),
         },
         {
-          value: '/',
-          title: 'Dashboard',
+          value: 'comments',
+          title: 'Comments',
           renderIcon: (selected, hovered) => (
-            <MoleculeIcon
+            <CommentIcon
               fill={selected ? '#FFFFFF' : hovered ? '#CCCCCC' : '#999999'}
             />
           ),
           selected: false,
-          onMouseEnter: () => loadRoute({ to: 'dashboard' }),
+          onMouseEnter: () => loadRoute({ to: 'comments' }),
         },
       ],
     },
@@ -134,7 +146,7 @@ const NavbarBlockItem = ({
           'text-neutral-400 hover:text-neutral-300 hover:cursor-pointer',
       })}
     >
-      <div className="flex gap-2 mb-2 last:mb-0">
+      <div className="flex gap-2 mb-2 last:mb-0 items-center">
         {renderIcon(selected, hovered)}
         <span>{title}</span>
         <MatchRoute to={value} pending>

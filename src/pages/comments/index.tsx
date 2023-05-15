@@ -2,38 +2,37 @@ import React, { useCallback, useState } from 'react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useNavigate } from '@tanstack/react-location';
 
-import { Tabs } from '../../components';
+import { Tabs, Status } from '../../components';
 import { ActivationUnionStatusType } from '../../interfaces';
-import { useUsers } from '../../query-hooks';
-import Status from '../../components/status';
+import { useComments } from '../../query-hooks';
 import { Placeholder } from '../../components/placeholder';
 
-const Users = () => {
+const Comments = () => {
   const navigate = useNavigate();
   const [parent] = useAutoAnimate<HTMLDivElement>(/* optional config */);
 
   const [tab, setTab] = useState<ActivationUnionStatusType>();
 
-  const { data } = useUsers({ status: tab });
+  const { data } = useComments({ status: tab });
 
   const handleChangeTab = useCallback((v) => {
     setTab(v);
   }, []);
 
   const handleView = useCallback((id) => {
-    navigate({ to: `/users/${id.toString()}`, replace: false });
+    navigate({ to: `/comments/${id.toString()}`, replace: false });
   }, []);
 
   return (
     <div>
       <div className="flex space-between items-center gap-4 h-6 text-neutral-600 mb-4">
-        <div className="text-xl">Users</div>
+        <div className="text-xl">Comments</div>
         <div className="w-px h-full bg-neutral-400" />
         <div className="text-xl grow">{data?.length}</div>
       </div>
       <Tabs
         options={[
-          { value: undefined, label: 'ALL USERS' },
+          { value: undefined, label: 'ALL COMMENTS' },
           { value: 'active', label: 'ACTIVE', badgeFill: 'success' },
           { value: 'inactive', label: 'INACTIVE', badgeFill: 'critic' },
         ]}
@@ -47,10 +46,10 @@ const Users = () => {
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>
                 <th scope="col" className="px-6 py-3">
-                  Email
+                  Date
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Role
+                  Text
                 </th>
                 <th
                   scope="col"
@@ -61,25 +60,25 @@ const Users = () => {
               </tr>
             </thead>
             <tbody>
-              {data?.map((u) => (
+              {data?.map((c) => (
                 <tr
-                  key={u.id}
+                  key={c.id}
                   className="bg-white border-b hover:bg-gray-100 cursor-pointer"
                   onClick={() => {
-                    handleView(u.id);
+                    handleView(c.id);
                   }}
                 >
                   <th
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                   >
-                    {u.email}
+                    {c.date}
                   </th>
-                  <td className="px-6 py-4">{u.isAdmin ? 'admin' : 'user'}</td>
+                  <td className="px-6 py-4">{c.text}</td>
                   <td className="px-6 py-4 flex space-x-1 justify-end items-center">
-                    <Status status={u.status} />{' '}
+                    <Status status={c.status} />{' '}
                     <span className={'inline-block ml-2'}>
-                      {u.status.toUpperCase()}
+                      {c.status.toUpperCase()}
                     </span>
                   </td>
                 </tr>
@@ -93,4 +92,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default Comments;

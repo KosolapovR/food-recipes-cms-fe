@@ -5,6 +5,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { Button, RecipeCard, Tabs } from '../../components';
 import { ActivationUnionStatusType } from '../../interfaces';
 import { useRecipes } from '../../query-hooks';
+import { Placeholder } from '../../components/placeholder';
 
 const Recipes = () => {
   const navigate = useNavigate();
@@ -46,14 +47,10 @@ const Recipes = () => {
         className="max-w-screen-xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-3 xl:gap-5"
       >
         {data.map((recipe) => (
-          <RecipeCard
-            key={recipe.id}
-            {...recipe}
-            commentsCount={0}
-            viewCount={0}
-          />
+          <RecipeCard {...recipe} key={recipe.id} />
         ))}
       </div>
+      {(!data || data.length === 0) && <Placeholder />}
     </div>
   );
 };

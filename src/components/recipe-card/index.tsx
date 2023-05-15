@@ -7,22 +7,18 @@ import { removeById } from '../../api/recipe';
 import { IRecipeGroupDTO } from '../../interfaces';
 import { useAuth } from '../../query-hooks';
 import CommentIcon from '../icons/comment.svg';
-import EyeIcon from '../icons/eye.svg';
+import HeartIcon from '../icons/heart-fill.svg';
 import Button from '../button';
 import Status from '../status';
-
-export interface IRecipeCard extends IRecipeGroupDTO {
-  commentsCount: number;
-  viewCount: number;
-}
 
 const RecipeCard = ({
   id,
   title,
-  commentsCount,
+  commentCount,
   status,
-  viewCount,
-}: IRecipeCard) => {
+  likeCount,
+  previewImagePath,
+}: IRecipeGroupDTO) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const authData = useAuth();
@@ -57,20 +53,22 @@ const RecipeCard = ({
         </div>
       </div>
       <div
-        // style={{ backgroundImage: `url(${baseUrl}/${imageSrc})` }}
-        className="rounded-lg bg-center bg-cover grow border-b border-neutral-200 border-b-1 px-6 font-semibold"
+        style={{ backgroundImage: `url(${previewImagePath})` }}
+        className="rounded-lg bg-center bg-cover grow border-b border-neutral-200 border-b-1 px-6 font-semibold relative"
       >
-        {title}
+        <div className="p-2 bg-white bg-opacity-75 w-full absolute left-0 right-0 top-0 px-6">
+          {title}
+        </div>
       </div>
       <div className="border-b border-neutral-200 px-6 py-3 flex justify-center gap-5 items-center">
         <div className="flex justify-end gap-2 items-center">
-          <EyeIcon fill="#999999" />
-          <span>{viewCount}</span>
+          <HeartIcon fill="#999999" />
+          <span>{likeCount}</span>
         </div>
         <div className="w-px h-full bg-neutral-200" />
         <div className="flex justify-start gap-2 items-center">
           <CommentIcon fill="#999999" />
-          <span>{commentsCount}</span>
+          <span>{commentCount}</span>
         </div>
       </div>
       <div className="flex justify-center gap-5 px-6 py-3">

@@ -1,4 +1,6 @@
 import { ActivationUnionStatusType, CommonUpdateDTOType } from './common';
+import { IUserSingleDTO } from './IUser';
+import { IRecipeSingleDTO } from './IRecipe';
 
 export interface ICommentSingleDTO {
   id: string;
@@ -6,14 +8,16 @@ export interface ICommentSingleDTO {
   status: ActivationUnionStatusType;
   date: string;
   userId: string;
+  user: IUserSingleDTO;
   recipeId: string;
+  recipe: IRecipeSingleDTO;
 }
 
-export type ICommentGroupDTO = ICommentSingleDTO;
+export type ICommentGroupDTO = Omit<ICommentSingleDTO, 'user' | 'recipe'>;
 
 export type ICommentCreateDTO = Omit<
   ICommentSingleDTO,
-  'id' | 'status' | 'date'
+  'id' | 'status' | 'date' | 'user' | 'recipe'
 >;
 
 export type ICommentUpdateDTO = CommonUpdateDTOType<

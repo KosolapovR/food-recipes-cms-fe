@@ -14,16 +14,19 @@ export interface IRecipeGroupDTO {
   categoryId: string;
   status: ActivationUnionStatusType;
   previewImagePath: string;
+  commentCount: number;
+  likeCount: number;
 }
 
 export interface IRecipeSingleDTO extends IRecipeGroupDTO {
   steps: IRecipeStep[];
   comments: ICommentSingleDTO[];
+  isLiked?: boolean;
 }
 
 export type IRecipeCreateDTO = Omit<
   IRecipeSingleDTO,
-  'id' | 'comments' | 'status'
+  'id' | 'comments' | 'status' | 'isLiked'
 >;
 
 export type IRecipeUpdateDTO = CommonUpdateDTOType<

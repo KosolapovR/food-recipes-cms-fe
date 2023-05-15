@@ -10,14 +10,24 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { fetchAll as fetchAllRecipes } from './api/recipe';
 import { fetchAll as fetchAllUsers } from './api/user';
+import { fetchAll as fetchAllComments } from './api/comment';
 import { BASE_PATH } from './const';
 import { AuthTokenContext } from './context/auth-token-context';
 import Layout from './layout/Layout';
-import { Dashboard, Login, Recipe, Recipes, User, Users } from './pages';
+import {
+  Comments,
+  Comment,
+  Dashboard,
+  Login,
+  Recipe,
+  Recipes,
+  User,
+  Users,
+} from './pages';
 import { useAuth } from './query-hooks';
 
 type LocationGenerics = MakeGenerics<{
-  Params: { recipeId: string; userId: string };
+  Params: { recipeId: string; userId: string; commentId: string };
 }>;
 const location = new ReactLocation<LocationGenerics>();
 
@@ -45,6 +55,22 @@ const Routes = () => {
         {
           path: ':recipeId',
           element: async ({ params }) => <Recipe id={params.recipeId} />,
+        },
+      ],
+    },
+    {
+      path: 'comments',
+      children: [
+        {
+          path: '/',
+          element: <Comments />,
+          loader: () =>
+            queryClient.getQueryData(['comments']) ??
+            queryClient.fetchQuery(['comments'], fetchAllComments),
+        },
+        {
+          path: ':commentId',
+          element: async ({ params }) => <Comment id={params.commentId} />,
         },
       ],
     },
