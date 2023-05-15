@@ -5,6 +5,8 @@ import Spinner from './spinner';
 import { Tabs } from './tabs';
 import FileDropZone from './file-drop-zone';
 import Image from './image';
+import Icon from './icons';
+import Status from './status';
 
 export {
   Button,
@@ -16,4 +18,6 @@ export {
   RecipeCard,
   FileDropZone,
   Image,
+  Icon,
+  Status,
 };

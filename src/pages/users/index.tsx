@@ -6,6 +6,7 @@ import { Tabs } from '../../components';
 import { ActivationUnionStatusType } from '../../interfaces';
 import { useUsers } from '../../query-hooks';
 import Status from '../../components/status';
+import { Placeholder } from '../../components/placeholder';
 
 const Users = () => {
   const navigate = useNavigate();
@@ -85,6 +86,7 @@ const Users = () => {
               ))}
             </tbody>
           </table>
+          {(!data || data.length === 0) && <Placeholder />}
         </div>
       </div>
     </div>

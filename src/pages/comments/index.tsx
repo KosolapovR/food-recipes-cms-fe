@@ -2,10 +2,10 @@ import React, { useCallback, useState } from 'react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useNavigate } from '@tanstack/react-location';
 
-import { Tabs } from '../../components';
+import { Tabs, Status } from '../../components';
 import { ActivationUnionStatusType } from '../../interfaces';
 import { useComments } from '../../query-hooks';
-import Status from '../../components/status';
+import { Placeholder } from '../../components/placeholder';
 
 const Comments = () => {
   const navigate = useNavigate();
@@ -85,6 +85,7 @@ const Comments = () => {
               ))}
             </tbody>
           </table>
+          {(!data || data.length === 0) && <Placeholder />}
         </div>
       </div>
     </div>

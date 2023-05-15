@@ -5,6 +5,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { Button, RecipeCard, Tabs } from '../../components';
 import { ActivationUnionStatusType } from '../../interfaces';
 import { useRecipes } from '../../query-hooks';
+import { Placeholder } from '../../components/placeholder';
 
 const Recipes = () => {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ const Recipes = () => {
           <RecipeCard {...recipe} key={recipe.id} />
         ))}
       </div>
+      {(!data || data.length === 0) && <Placeholder />}
     </div>
   );
 };
