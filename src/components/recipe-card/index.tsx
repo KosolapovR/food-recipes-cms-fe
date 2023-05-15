@@ -17,6 +17,7 @@ const RecipeCard = ({
   commentCount,
   status,
   likeCount,
+  previewImagePath,
 }: IRecipeGroupDTO) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -52,10 +53,12 @@ const RecipeCard = ({
         </div>
       </div>
       <div
-        // style={{ backgroundImage: `url(${baseUrl}/${imageSrc})` }}
-        className="rounded-lg bg-center bg-cover grow border-b border-neutral-200 border-b-1 px-6 font-semibold"
+        style={{ backgroundImage: `url(${previewImagePath})` }}
+        className="rounded-lg bg-center bg-cover grow border-b border-neutral-200 border-b-1 px-6 font-semibold relative"
       >
-        {title}
+        <div className="p-2 bg-white bg-opacity-75 w-full absolute left-0 right-0 top-0 px-6">
+          {title}
+        </div>
       </div>
       <div className="border-b border-neutral-200 px-6 py-3 flex justify-center gap-5 items-center">
         <div className="flex justify-end gap-2 items-center">

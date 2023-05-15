@@ -127,12 +127,14 @@ const RecipeForm = ({ onSubmit, actions, data }: IRecipeFormProps) => {
           />
           {imageSrc ? (
             <Image
+              className="my-2"
               src={imageSrc}
               style={{ width: '100%', height: 'auto' }}
               onDelete={handleClearImageBuffer}
             />
           ) : (
             <FileDropZone
+              className="my-2"
               onChangeFiles={handleChangeFiles}
               multiple={false}
               availableFormats={['png', 'jpeg']}
