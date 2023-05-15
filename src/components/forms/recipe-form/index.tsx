@@ -36,11 +36,13 @@ export interface IRecipeFormProps {
 
 const RecipeForm = ({ onSubmit, actions, data }: IRecipeFormProps) => {
   const { id, status, previewImagePath, title } = data;
+  const [imageSrc, setImageSrc] = useState<string>(previewImagePath);
+
   const formik = useFormik({
     initialValues: data,
     validationSchema,
     onSubmit: (params) => {
-      onSubmit({ ...params, previewImagePath: previewImagePath || imageSrc });
+      onSubmit({ ...params, previewImagePath: imageSrc });
     },
   });
   const {
@@ -56,7 +58,6 @@ const RecipeForm = ({ onSubmit, actions, data }: IRecipeFormProps) => {
   const [parent] = useAutoAnimate<HTMLDivElement>({});
 
   const [openedFieldBlocks, setOpenedFieldBLocks] = useState<number[]>([]);
-  const [imageSrc, setImageSrc] = useState<string>();
   const toggleFieldBlock = useCallback(
     (index) => {
       if (
@@ -82,6 +83,7 @@ const RecipeForm = ({ onSubmit, actions, data }: IRecipeFormProps) => {
   );
 
   const handleClearImageBuffer = useCallback(() => {
+    formik.setFieldValue('image', undefined);
     setImageSrc(undefined);
   }, []);
 
@@ -123,9 +125,9 @@ const RecipeForm = ({ onSubmit, actions, data }: IRecipeFormProps) => {
             value={values.title}
             meta={getFieldMeta('title')}
           />
-          {previewImagePath || imageSrc ? (
+          {imageSrc ? (
             <Image
-              src={previewImagePath || imageSrc}
+              src={imageSrc}
               style={{ width: '100%', height: 'auto' }}
               onDelete={handleClearImageBuffer}
             />
