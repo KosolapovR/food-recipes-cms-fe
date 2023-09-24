@@ -47,19 +47,16 @@ const RecipeCard = ({
 
   return (
     <div className="flex flex-col justify-s h-80 bg-white shadow-md hover:shadow-lg hover:bg-green-50 rounded rounded-lg">
-      <div className="pt-4 px-4">
-        <div className="flex justify-end h-6">
+      <div className="py-2 px-4">
+        <div className="flex justify-between align-top items-center h-6">
+          {title}
           <Status status={status} />
         </div>
       </div>
       <div
         style={{ backgroundImage: `url(${previewImagePath})` }}
-        className="rounded-lg bg-center bg-cover grow border-b border-neutral-200 border-b-1 px-6 font-semibold relative"
-      >
-        <div className="p-2 bg-white bg-opacity-75 w-full absolute left-0 right-0 top-0 px-6">
-          {title}
-        </div>
-      </div>
+        className="bg-center bg-cover grow border-b border-neutral-200 border-b-1 px-6 font-semibold relative"
+      ></div>
       <div className="border-b border-neutral-200 px-6 py-3 flex justify-center gap-5 items-center">
         <div className="flex justify-end gap-2 items-center">
           <HeartIcon fill="#999999" />

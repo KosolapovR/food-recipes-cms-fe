@@ -23,7 +23,7 @@ const Button = ({
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       if (isLoading) return;
-      onClick(e);
+      onClick?.(e);
     },
     [onClick, isLoading]
   );

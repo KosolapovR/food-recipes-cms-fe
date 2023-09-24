@@ -45,7 +45,7 @@ const App = () => {
       // Any status codes that falls outside the range of 2xx cause this function to trigger
       // Do something with response error
       if (error.response.status === 401) {
-        window.location.href = `${BASE_PATH}/login`;
+        window.location.href = `${BASE_PATH}`;
         insertToken(null);
         localStorage.setItem(API_TOKEN, null);
         queryClient.clear();

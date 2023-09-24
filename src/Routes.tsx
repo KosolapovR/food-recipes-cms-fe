@@ -15,10 +15,10 @@ import { BASE_PATH } from './const';
 import { AuthTokenContext } from './context/auth-token-context';
 import Layout from './layout/Layout';
 import {
+  Auth,
   Comments,
   Comment,
   Dashboard,
-  Login,
   Recipe,
   Recipes,
   User,
@@ -118,7 +118,7 @@ const Routes = () => {
           <Outlet />
         </Layout>
       ) : (
-        <Login />
+        <Auth />
       )}
     </Router>
   );

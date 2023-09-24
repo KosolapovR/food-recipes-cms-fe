@@ -2,19 +2,20 @@ import React, { InputHTMLAttributes, useEffect, useRef } from 'react';
 import { FieldMetaProps } from 'formik';
 import cn from 'classnames';
 import autoAnimate from '@formkit/auto-animate';
+import ChevronRight from '../../icons/chevron-right.svg';
 
 export interface ITextFieldProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'form'> {
+  extends Omit<InputHTMLAttributes<HTMLSelectElement>, 'form'> {
   meta: FieldMetaProps<string>;
 }
 
-const TextField = ({ meta, className, ...props }: ITextFieldProps) => {
+const SelectField = ({ meta, className, ...props }: ITextFieldProps) => {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    autoAnimate(ref.current);
-  }, []);
+    if (ref.current) autoAnimate(ref.current);
+  }, [ref.current]);
   return (
-    <div className="text-left ">
+    <div className="inline-block relative w-64">
       <label
         className={cn(
           'inline-block text-sm',
@@ -24,8 +25,7 @@ const TextField = ({ meta, className, ...props }: ITextFieldProps) => {
       >
         {props.title}
       </label>
-      <input
-        type="text"
+      <select
         {...props}
         className={cn(
           'w-full my-1 px-4 py-2 z-20 bg-neutral-200 rounded border border-solid placeholder:text-sm',
@@ -34,12 +34,19 @@ const TextField = ({ meta, className, ...props }: ITextFieldProps) => {
             : 'border-transparent ',
           className
         )}
-      />
-      <div ref={ref} className="min-h-4 text-red-500 text-xs">
-        {meta?.touched && meta?.error}
+      >
+        <option>Really long option that will likely overlap the chevron</option>
+        <option>Option 2</option>
+        <option>Option 3</option>
+      </select>
+      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+        <ChevronRight fill={'#555555'} />
       </div>
+      {meta?.touched && meta?.error && (
+        <div className="text-red-500 text-xs">{meta?.error}</div>
+      )}
     </div>
   );
 };
 
-export default TextField;
+export default SelectField;

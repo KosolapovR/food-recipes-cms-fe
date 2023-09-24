@@ -8,12 +8,7 @@ import MoleculeIcon from '../../components/icons/molecule.svg';
 import BookIcon from '../../components/icons/book.svg';
 import UsersIcon from '../../components/icons/users.svg';
 import CommentIcon from '../../components/icons/comment.svg';
-import {
-  Link,
-  MatchRoute,
-  useLoadRoute,
-  useMatchRoute,
-} from '@tanstack/react-location';
+import { Link, MatchRoute, useLoadRoute } from '@tanstack/react-location';
 import Spinner from '../../components/spinner';
 import { useAuth } from '../../query-hooks';
 
@@ -32,7 +27,6 @@ function Navbar() {
               fill={selected ? '#FFFFFF' : hovered ? '#CCCCCC' : '#999999'}
             />
           ),
-          selected: false,
           onMouseEnter: () => loadRoute({ to: 'dashboard' }),
         },
         {
@@ -43,7 +37,6 @@ function Navbar() {
               fill={selected ? '#FFFFFF' : hovered ? '#CCCCCC' : '#999999'}
             />
           ),
-          selected: true,
           onMouseEnter: () => loadRoute({ to: 'recipes' }),
         },
         {
@@ -54,7 +47,6 @@ function Navbar() {
               fill={selected ? '#FFFFFF' : hovered ? '#CCCCCC' : '#999999'}
             />
           ),
-          selected: false,
           onMouseEnter: () => loadRoute({ to: 'comments' }),
         },
       ],
@@ -71,7 +63,6 @@ function Navbar() {
               fill={selected ? '#FFFFFF' : hovered ? '#CCCCCC' : '#999999'}
             />
           ),
-          selected: false,
           onMouseEnter: () => loadRoute({ to: 'users' }),
         },
       ],
@@ -82,8 +73,8 @@ function Navbar() {
     <nav className="fixed z-10 w-52 h-full bg-zinc-700 p-6 mt-16 shadow-md">
       {blocks
         .filter((block) => !block.hidden)
-        .map((block, index) => (
-          <NavbarBlock key={index} {...block} />
+        .map((block) => (
+          <NavbarBlock {...block} key={block.title} />
         ))}
     </nav>
   );
@@ -94,35 +85,26 @@ export interface INavbarBlock {
   items: INavbarBlockItem[];
   hidden?: boolean;
 }
-const NavbarBlock = ({ title, items }: INavbarBlock) => {
-  const matchRoute = useMatchRoute();
-  return (
-    <div className="mb-4 last:mb-0">
-      <span className="inline-block mb-2 text-neutral-400 text-xs font-semibold">
-        {title}
-      </span>
-      {items.map((item, index) => (
-        <NavbarBlockItem
-          key={index}
-          {...item}
-          selected={!!matchRoute({ to: item.value })}
-        />
-      ))}
-    </div>
-  );
-};
+const NavbarBlock = ({ title, items }: INavbarBlock) => (
+  <div className="mb-4 last:mb-0">
+    <span className="inline-block mb-2 text-neutral-400 text-xs font-semibold">
+      {title}
+    </span>
+    {items.map((item) => (
+      <NavbarBlockItem {...item} key={item.value} />
+    ))}
+  </div>
+);
 
 export interface INavbarBlockItem {
   value: string;
   title: string;
   renderIcon: (selected?: boolean, hovered?: boolean) => ReactNode;
-  selected?: boolean;
   onMouseEnter: MouseEventHandler;
 }
 const NavbarBlockItem = ({
   value,
   title,
-  selected,
   renderIcon,
   onMouseEnter,
 }: INavbarBlockItem) => {
@@ -140,19 +122,22 @@ const NavbarBlockItem = ({
       to={`./${value}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      className="flex gap-2 mb-2 last:mb-0 items-center"
       getActiveProps={() => ({ className: 'text-neutral-100' })}
       getInactiveProps={() => ({
         className:
           'text-neutral-400 hover:text-neutral-300 hover:cursor-pointer',
       })}
     >
-      <div className="flex gap-2 mb-2 last:mb-0 items-center">
-        {renderIcon(selected, hovered)}
-        <span>{title}</span>
-        <MatchRoute to={value} pending>
-          <Spinner />
-        </MatchRoute>
-      </div>
+      {({ isActive }) => (
+        <>
+          {renderIcon(isActive, hovered)}
+          {title}
+          <MatchRoute to={value} pending>
+            <Spinner />
+          </MatchRoute>
+        </>
+      )}
     </Link>
   );
 };

@@ -13,6 +13,7 @@ import FieldsBlock from '../../fields-block';
 import { IActionInfo } from '../../action-buttons';
 import FormHeader from '../../form-header';
 import Image from '../../image';
+import { SelectField } from '../../inputs';
 
 const RecipeStepSchema = Yup.object().shape({
   title: Yup.string().min(2, 'Min length 2').max(255, 'Max length 255'),
@@ -37,6 +38,10 @@ export interface IRecipeFormProps {
 const RecipeForm = ({ onSubmit, actions, data }: IRecipeFormProps) => {
   const { id, status, previewImagePath, title } = data;
   const [imageSrc, setImageSrc] = useState<string>(previewImagePath);
+
+  useEffect(() => {
+    setImageSrc(previewImagePath);
+  }, [previewImagePath]);
 
   const formik = useFormik({
     initialValues: data,
@@ -141,7 +146,7 @@ const RecipeForm = ({ onSubmit, actions, data }: IRecipeFormProps) => {
             />
           )}
 
-          <TextField
+          <SelectField
             id="categoryId"
             title="CategoryId"
             placeholder="categoryId"
