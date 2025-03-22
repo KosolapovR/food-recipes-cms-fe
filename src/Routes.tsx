@@ -11,11 +11,13 @@ import { useQueryClient } from '@tanstack/react-query';
 import { fetchAll as fetchAllRecipes } from './api/recipe';
 import { fetchAll as fetchAllUsers } from './api/user';
 import { fetchAll as fetchAllComments } from './api/comment';
+import { fetchAll as fetchAllCategories } from './api/category';
 import { BASE_PATH } from './const';
 import { AuthTokenContext } from './context/auth-token-context';
 import Layout from './layout/Layout';
 import {
   Auth,
+  Categories,
   Comments,
   Comment,
   Dashboard,
@@ -25,9 +27,15 @@ import {
   Users,
 } from './pages';
 import { useAuth } from './query-hooks';
+import Category from './pages/category';
 
 type LocationGenerics = MakeGenerics<{
-  Params: { recipeId: string; userId: string; commentId: string };
+  Params: {
+    recipeId: string;
+    userId: string;
+    commentId: string;
+    categoryId: string;
+  };
 }>;
 const location = new ReactLocation<LocationGenerics>();
 
@@ -76,6 +84,22 @@ const Routes = () => {
     },
   ];
   const privateRoutes: Route<LocationGenerics>[] = [
+    {
+      path: 'categories',
+      children: [
+        {
+          path: '/',
+          element: <Categories />,
+          loader: () =>
+            queryClient.getQueryData(['categories']) ??
+            queryClient.fetchQuery(['categories'], fetchAllCategories),
+        },
+        {
+          path: ':categoryId',
+          element: async ({ params }) => <Category id={params.categoryId} />,
+        },
+      ],
+    },
     {
       path: 'users',
       children: [

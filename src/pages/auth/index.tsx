@@ -5,9 +5,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-location';
 
 import { auth } from '../../api/auth';
-import { Button, TextField } from '../../components';
-import { AuthTokenContext } from '../../context/auth-token-context';
 import { register } from '../../api/register';
+import { Button, TextField, Link } from '../../components';
+import { AuthTokenContext } from '../../context/auth-token-context';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 
@@ -102,7 +102,7 @@ const Auth = () => {
               meta={getFieldMeta('repeat_password')}
             />
           )}
-          <span
+          <Link
             className={
               'text-sm text-blue-500 hover:text-blue-700 cursor-pointer'
             }
@@ -113,7 +113,7 @@ const Auth = () => {
             {isLoginForm
               ? "Don't have an account? Sign up"
               : 'Already have an account? Sign in'}
-          </span>
+          </Link>
           <Button
             type="submit"
             title="Submit"

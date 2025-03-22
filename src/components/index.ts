@@ -7,6 +7,7 @@ import FileDropZone from './file-drop-zone';
 import Image from './image';
 import Icon from './icons';
 import Status from './status';
+import Link from './link';
 
 export {
   Button,
@@ -19,5 +20,6 @@ export {
   FileDropZone,
   Image,
   Icon,
+  Link,
   Status,
 };

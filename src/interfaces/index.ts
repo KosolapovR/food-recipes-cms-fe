@@ -17,6 +17,12 @@ import {
   ICommentUpdateDTO,
   ICommentGroupDTO,
 } from './IComment';
+import {
+  ICategoryCreateDTO,
+  ICategorySingleDTO,
+  ICategoryGroupDTO,
+  ICategoryUpdateDTO,
+} from './ICategory';
 import { IFileStorageResponse } from './IFileStorage';
 import {
   CommonGroupActionBodyType,
@@ -43,6 +49,10 @@ export {
   ICommentSingleDTO,
   ICommentUpdateDTO,
   ICommentGroupDTO,
+  ICategoryCreateDTO,
+  ICategoryUpdateDTO,
+  ICategoryGroupDTO,
+  ICategorySingleDTO,
   IFileStorageResponse,
   BaseFuncType,
   CommonGroupActionBodyType,

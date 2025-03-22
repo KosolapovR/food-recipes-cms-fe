@@ -142,7 +142,7 @@ const RecipeForm = ({ onSubmit, actions, data }: IRecipeFormProps) => {
               className="my-2"
               onChangeFiles={handleChangeFiles}
               multiple={false}
-              availableFormats={['png', 'jpeg']}
+              availableFormats={['png', 'jpeg', 'webp']}
             />
           )}
 
@@ -153,6 +153,7 @@ const RecipeForm = ({ onSubmit, actions, data }: IRecipeFormProps) => {
             onChange={handleChange}
             value={values.categoryId}
             meta={getFieldMeta('categoryId')}
+            options={[]}
           />
           <div className="font-semibold mt-4 mb-2">Steps</div>
           <FieldArray name="steps">

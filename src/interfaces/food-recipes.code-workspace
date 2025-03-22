@@ -1,0 +1,17 @@
+{
+  "folders": [
+    {
+      "path": "../.."
+    },
+    {
+      "path": "../../../food-recipes-cms-be"
+    },
+    {
+      "path": "../../../food_recipes_container"
+    },
+    {
+      "path": "../../../food-recipes-web"
+    }
+  ],
+  "settings": {}
+}

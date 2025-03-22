@@ -1,5 +1,6 @@
 import axios from '../axios-instance';
 import { IUserSingleDTO, ApiResponse } from '../../interfaces';
+import { AxiosError } from 'axios';
 
 const servicePath = '/auth';
 

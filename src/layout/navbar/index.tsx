@@ -56,6 +56,16 @@ function Navbar() {
       hidden: !authData?.isAdmin,
       items: [
         {
+          value: 'categories',
+          title: 'Categories',
+          renderIcon: (selected, hovered) => (
+            <UsersIcon
+              fill={selected ? '#FFFFFF' : hovered ? '#CCCCCC' : '#999999'}
+            />
+          ),
+          onMouseEnter: () => loadRoute({ to: 'categories' }),
+        },
+        {
           value: 'users',
           title: 'Users',
           renderIcon: (selected, hovered) => (
