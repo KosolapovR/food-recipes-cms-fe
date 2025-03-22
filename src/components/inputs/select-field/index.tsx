@@ -1,13 +1,6 @@
-import React, {
-  InputHTMLAttributes,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { InputHTMLAttributes } from 'react';
 import { FieldMetaProps } from 'formik';
 import cn from 'classnames';
-import autoAnimate from '@formkit/auto-animate';
 import ChevronRight from '../../icons/chevron-right.svg';
 
 export interface IOption {

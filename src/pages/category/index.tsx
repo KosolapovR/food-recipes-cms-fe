@@ -13,7 +13,6 @@ import {
 import { getCommonMutationGenerator } from '../../common-mutations';
 import { IActionInfo } from '../../components/action-buttons';
 import { CategoryForm } from '../../components/forms';
-import { IOption } from '../../components/inputs/select-field';
 
 const CategoryPage = ({ id }: IdRouteParams) => {
   const navigation = useNavigate();
